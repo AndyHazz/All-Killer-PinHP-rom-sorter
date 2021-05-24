@@ -17,9 +17,46 @@ find . -mindepth 2 -type f -print -exec mv {} . \;
 # Remove empty directories
 find . -type d -empty -delete
 
+
+#=========== BIOS files ==============================================================
+
+# First, move all the bios files to one place
+# We will later copy all of these into each game genre folder
+# ... because we don't know which might be required, and they don't take much space
+
+mkdir ".BIOS"
+
+mv acpsx.zip ".BIOS"		# Acclaim PSX
+mv ar_bios.zip ".BIOS"		# Arcadia System BIOS
+mv atluspsx.zip ".BIOS"		# Atlus PSX
+mv atpsx.zip ".BIOS"	 	# Atari PSX
+mv bctvidbs.zip ".BIOS"		# MPU4 Video Firmware
+mv cpzn1.zip ".BIOS"		# ZN1
+mv cpzn2.zip ".BIOS" 		# ZN2
+mv crysbios.zip ".BIOS"		# Crystal System Bios
+mv cvs.zip ".BIOS"			# CVS Bios
+mv decocass.zip ".BIOS"		# Cassette System
+mv hng64.zip ".BIOS"		# Hyper NeoGeo 64 Bios
+mv konamigv.zip ".BIOS"		# Baby Phoenix-GV System
+mv macsbios.zip ".BIOS"		# Multi Amenity Cassette System Bios
+mv maxaflex.zip ".BIOS"		# Max-A-Flex
+mv megaplay.zip ".BIOS"		# Mega Play Bios
+mv megatech.zip ".BIOS"		# Mega-Tech Bios
+mv neogeo.zip ".BIOS"		# Neo-Geo
+mv nss.zip ".BIOS"			# Nintendo Super System Bios
+mv pgm.zip ".BIOS"			# PGM (Polygame Master) System Bios
+mv playch10.zip ".BIOS"		# PlayChoice-10 Bios
+mv psarc95.zip ".BIOS"		# PS Arcade 95
+mv skns.zip ".BIOS"			# Super Kaneko Nova System Bios
+mv stvbios.zip ".BIOS"		# ST-V Bios
+mv tatiofx.zip ".BIOS"		# Tatio FX1
+mv tps.zip ".BIOS"			# TPS
+
+
 #=========== Classics - Horizontal ==============================================================
 
 mkdir "[Classics]"
+cp BIOS/*.zip "[Classics]"
 
 mv astdelux.zip "[Classics]"
 mv berzerk.zip "[Classics]"
@@ -121,6 +158,7 @@ mv zaxxon.zip "[Classics]"
 #=========== Platformers ==============================================================
 
 mkdir "[Platformers]"
+cp BIOS/*.zip "[Platformers]"
 
 mv alexkidd.zip "[Platformers]"
 mv arabian.zip "[Platformers]"
@@ -203,6 +241,7 @@ mv wbmlvc.zip "[Platformers]"
 #=========== Beat 'em ups ==============================================================
 
 mkdir "[Beat 'em ups]"
+cp BIOS/*.zip "[Beat 'em ups]"
 
 mv 64street.zip "[Beat 'em ups]"
 mv aoh.zip "[Beat 'em ups]"
@@ -304,6 +343,7 @@ mv xmen2pu.zip "[Beat 'em ups]"
 #=========== Run and Gun ==============================================================
 
 mkdir "[Run and gun]"
+cp BIOS/*.zip "[Run and gun]"
 
 mv aliensyn.zip "[Run and gun]"
 mv aliens.zip "[Run and gun]"
@@ -381,6 +421,7 @@ mv xsleena.zip "[Run and gun]"
 #=========== Puzzle ==============================================================
 
 mkdir "[Puzzle]"
+cp BIOS/*.zip "[Puzzle]"
 
 mv aquarush.zip "[Puzzle]"
 mv bakubaku.zip "[Puzzle]"
@@ -442,6 +483,7 @@ mv watrball.zip "[Puzzle]"
 #=========== Sports ==============================================================
 
 mkdir "[Sports]"
+cp BIOS/*.zip "[Sports]"
 
 mv 88games.zip "[Sports]"
 mv alpine.zip "[Sports]"
@@ -537,6 +579,7 @@ mv konamigv.zip "[Sports]"
 
 
 mkdir "[Shoot 'em ups]"
+cp BIOS/*.zip "[Shoot 'em ups]"
 
 mv 1942.zip "[Shoot 'em ups]"
 #mv 1943.zip "[Shoot 'em ups]"
@@ -747,6 +790,8 @@ mv zerowing.zip "[Shoot 'em ups]"
 #If your computer is not fast enough to run the sequels you may want to include them
 
 mkdir "[Vs Fighting]"
+cp BIOS/*.zip "[Vs Fighting]"
+
 mv aof3.zip "[Vs Fighting]"
 mv neogeo.zip "[Vs Fighting]"
 mv asurabus.zip "[Vs Fighting]"
@@ -830,4 +875,5 @@ mv namcoc76.zip "[Vs Fighting]"
 #===========Everything else==============================================================
 
 mkdir ".Leftovers"
+cp BIOS/*.zip ".Leftovers"
 mv *.zip ".Leftovers"
