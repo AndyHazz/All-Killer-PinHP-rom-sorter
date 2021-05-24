@@ -26,31 +26,33 @@ find . -type d -empty -delete
 
 mkdir ".BIOS"
 
-mv acpsx.zip ".BIOS"		# Acclaim PSX
+mv acpsx.zip ".BIOS"		  # Acclaim PSX
 mv ar_bios.zip ".BIOS"		# Arcadia System BIOS
 mv atluspsx.zip ".BIOS"		# Atlus PSX
-mv atpsx.zip ".BIOS"	 	# Atari PSX
+mv atpsx.zip ".BIOS"	 	  # Atari PSX
 mv bctvidbs.zip ".BIOS"		# MPU4 Video Firmware
-mv cpzn1.zip ".BIOS"		# ZN1
-mv cpzn2.zip ".BIOS" 		# ZN2
+mv cpzn1.zip ".BIOS"		  # ZN1
+mv cpzn2.zip ".BIOS" 		  # ZN2
 mv crysbios.zip ".BIOS"		# Crystal System Bios
-mv cvs.zip ".BIOS"			# CVS Bios
+mv cvs.zip ".BIOS"			  # CVS Bios
 mv decocass.zip ".BIOS"		# Cassette System
-mv hng64.zip ".BIOS"		# Hyper NeoGeo 64 Bios
+mv hng64.zip ".BIOS"		  # Hyper NeoGeo 64 Bios
 mv konamigv.zip ".BIOS"		# Baby Phoenix-GV System
+mv konamigx.zip ".BIOS"		# System GX
 mv macsbios.zip ".BIOS"		# Multi Amenity Cassette System Bios
 mv maxaflex.zip ".BIOS"		# Max-A-Flex
 mv megaplay.zip ".BIOS"		# Mega Play Bios
 mv megatech.zip ".BIOS"		# Mega-Tech Bios
-mv neogeo.zip ".BIOS"		# Neo-Geo
-mv nss.zip ".BIOS"			# Nintendo Super System Bios
-mv pgm.zip ".BIOS"			# PGM (Polygame Master) System Bios
+mv neogeo.zip ".BIOS"		  # Neo-Geo
+mv nss.zip ".BIOS"			  # Nintendo Super System Bios
+mv pgm.zip ".BIOS"			  # PGM (Polygame Master) System Bios
 mv playch10.zip ".BIOS"		# PlayChoice-10 Bios
 mv psarc95.zip ".BIOS"		# PS Arcade 95
-mv skns.zip ".BIOS"			# Super Kaneko Nova System Bios
+mv skns.zip ".BIOS"			  # Super Kaneko Nova System Bios
 mv stvbios.zip ".BIOS"		# ST-V Bios
-mv tatiofx.zip ".BIOS"		# Tatio FX1
-mv tps.zip ".BIOS"			# TPS
+mv taitofx.zip ".BIOS"		# Taito FX1
+mv taitogn.zip ".BIOS"		# Taito GNET
+mv tps.zip ".BIOS"			  # TPS
 
 
 #=========== Classics - Horizontal ==============================================================
