@@ -56,7 +56,7 @@ mv tps.zip ".BIOS"			# TPS
 #=========== Classics - Horizontal ==============================================================
 
 mkdir "[Classics]"
-cp BIOS/*.zip "[Classics]"
+cp .BIOS/*.zip "[Classics]"
 
 mv astdelux.zip "[Classics]"
 mv berzerk.zip "[Classics]"
@@ -158,7 +158,7 @@ mv zaxxon.zip "[Classics]"
 #=========== Platformers ==============================================================
 
 mkdir "[Platformers]"
-cp BIOS/*.zip "[Platformers]"
+cp .BIOS/*.zip "[Platformers]"
 
 mv alexkidd.zip "[Platformers]"
 mv arabian.zip "[Platformers]"
@@ -241,7 +241,7 @@ mv wbmlvc.zip "[Platformers]"
 #=========== Beat 'em ups ==============================================================
 
 mkdir "[Beat 'em ups]"
-cp BIOS/*.zip "[Beat 'em ups]"
+cp .BIOS/*.zip "[Beat 'em ups]"
 
 mv 64street.zip "[Beat 'em ups]"
 mv aoh.zip "[Beat 'em ups]"
@@ -343,7 +343,7 @@ mv xmen2pu.zip "[Beat 'em ups]"
 #=========== Run and Gun ==============================================================
 
 mkdir "[Run and gun]"
-cp BIOS/*.zip "[Run and gun]"
+cp .BIOS/*.zip "[Run and gun]"
 
 mv aliensyn.zip "[Run and gun]"
 mv aliens.zip "[Run and gun]"
@@ -421,7 +421,7 @@ mv xsleena.zip "[Run and gun]"
 #=========== Puzzle ==============================================================
 
 mkdir "[Puzzle]"
-cp BIOS/*.zip "[Puzzle]"
+cp .BIOS/*.zip "[Puzzle]"
 
 mv aquarush.zip "[Puzzle]"
 mv bakubaku.zip "[Puzzle]"
@@ -483,7 +483,7 @@ mv watrball.zip "[Puzzle]"
 #=========== Sports ==============================================================
 
 mkdir "[Sports]"
-cp BIOS/*.zip "[Sports]"
+cp .BIOS/*.zip "[Sports]"
 
 mv 88games.zip "[Sports]"
 mv alpine.zip "[Sports]"
@@ -579,7 +579,7 @@ mv konamigv.zip "[Sports]"
 
 
 mkdir "[Shoot 'em ups]"
-cp BIOS/*.zip "[Shoot 'em ups]"
+cp .BIOS/*.zip "[Shoot 'em ups]"
 
 mv 1942.zip "[Shoot 'em ups]"
 #mv 1943.zip "[Shoot 'em ups]"
@@ -790,7 +790,7 @@ mv zerowing.zip "[Shoot 'em ups]"
 #If your computer is not fast enough to run the sequels you may want to include them
 
 mkdir "[Vs Fighting]"
-cp BIOS/*.zip "[Vs Fighting]"
+cp .BIOS/*.zip "[Vs Fighting]"
 
 mv aof3.zip "[Vs Fighting]"
 mv neogeo.zip "[Vs Fighting]"
@@ -875,5 +875,5 @@ mv namcoc76.zip "[Vs Fighting]"
 #===========Everything else==============================================================
 
 mkdir ".Leftovers"
-cp BIOS/*.zip ".Leftovers"
+cp .BIOS/*.zip ".Leftovers"
 mv *.zip ".Leftovers"
