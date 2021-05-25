@@ -816,7 +816,8 @@ mv xmvsf.zip "[Vs Fighting]"
 
 #===========Everything else==============================================================
 
-mkdir "Leftovers"
-# echo "#Leftovers" > Leftovers/.title 	#Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
-cp .BIOS/*.zip "Leftovers"
-mv *.zip "Leftovers"
+mkdir "[[Leftovers]]"
+echo "#Hidden-folder" > [[Leftovers]]/.title 	#Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
+cp .BIOS/*.zip "[[Leftovers]]"
+mv *.zip "[[Leftovers]]"
+rm .title # Delete unwanted .title folder from root of roms dir
