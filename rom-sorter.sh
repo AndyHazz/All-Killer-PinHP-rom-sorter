@@ -837,4 +837,4 @@ echo "#Hidden-folder" > [Leftovers]/.title 	#Write a hidden file to the lefotver
 mv *.zip "[Leftovers]"
 rm .title # Delete unwanted .title folder from root of roms dir
 
-echo "14/14 - All done!"
+echo "14/14 - All done! Reboot to update menu ..."
