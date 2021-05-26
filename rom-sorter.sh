@@ -70,7 +70,7 @@ mv tps.zip ".BIOS"			# TPS
 echo "03/14 - Finding the best horizontal classics"
 
 mkdir "Classics"
-cp .BIOS/*.zip "Classics"
+#cp .BIOS/*.zip "Classics"
 
 mv astdelux.zip "Classics"
 mv berzerk.zip "Classics"
@@ -169,7 +169,7 @@ mv zaxxon.zip "Classics"
 echo "05/14 - Finding the best platformers"
 
 mkdir "Platformers"
-cp .BIOS/*.zip "Platformers"
+#cp .BIOS/*.zip "Platformers"
 
 mv alexkidd.zip "Platformers"
 mv arabian.zip "Platformers"
@@ -252,7 +252,7 @@ mv wiz.zip "Platformers"
 echo "06/14 - Finding the best beat 'em ups"
 
 mkdir "Beat 'em ups"
-cp .BIOS/*.zip "Beat 'em ups"
+#cp .BIOS/*.zip "Beat 'em ups"
 
 mv 64street.zip "Beat 'em ups"
 mv altbeast.zip "Beat 'em ups"
@@ -344,7 +344,7 @@ mv xmen2p.zip "Beat 'em ups"
 echo "07/14 - Finding the best run and gun games"
 
 mkdir "Run and gun"
-cp .BIOS/*.zip "Run and gun"
+#cp .BIOS/*.zip "Run and gun"
 
 mv aliens.zip "Run and gun"
 mv aliensyn.zip "Run and gun"
@@ -418,7 +418,7 @@ mv xybots.zip "Run and gun"
 echo "08/14 - Finding the best puzzle games"
 
 mkdir "Puzzle"
-cp .BIOS/*.zip "Puzzle"
+#cp .BIOS/*.zip "Puzzle"
 
 mv mosaicf2.zip "Puzzle"
 mv aquarush.zip "Puzzle"
@@ -475,7 +475,7 @@ mv watrball.zip "Puzzle"
 echo "09/14 - Finding the best sports games"
 
 mkdir "Sports"
-cp .BIOS/*.zip "Sports"
+#cp .BIOS/*.zip "Sports"
 
 #mv wrally.zip "Sports" # Unfortunately won't work in AdvMame
 mv 2020bb.zip "Sports"
@@ -561,7 +561,7 @@ mv wwfwfest.zip "Sports"
 echo "10/14 - Finding the best vertical shmups"
 
 mkdir "Shoot 'em ups"
-cp .BIOS/*.zip "Shoot 'em ups"
+#cp .BIOS/*.zip "Shoot 'em ups"
 
 mv 1943.zip "Shoot 'em ups"
 mv agallet.zip "Shoot 'em ups"
@@ -757,7 +757,7 @@ echo "12/14 - Finding the best Vs fighting games"
 #If your computer is not fast enough to run the sequels you may want to include them
 
 mkdir "Vs Fighting"
-cp .BIOS/*.zip "Vs Fighting"
+#cp .BIOS/*.zip "Vs Fighting"
 
 mv starglad.zip "Vs Fighting"
 mv tekken2.zip "Vs Fighting"
@@ -833,7 +833,7 @@ mv xmvsf.zip "Vs Fighting"
 echo "13/14 - Moving everything else to a hidden [Leftovers] folder"
 mkdir "[Leftovers]"
 echo "#Hidden-folder" > [Leftovers]/.title 	#Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
-cp .BIOS/*.zip "[Leftovers]"
+#cp .BIOS/*.zip "[Leftovers]"
 mv *.zip "[Leftovers]"
 rm .title # Delete unwanted .title folder from root of roms dir
 
