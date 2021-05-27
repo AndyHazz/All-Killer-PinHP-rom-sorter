@@ -1,4 +1,4 @@
-# All Killer no filler PinHP rom sorter
+# All Killer, No Filler PinHP rom sorter
 
 Put this script in your PinHP advmame_roms folder, along with a full advance mame (0.106) romset
 
