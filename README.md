@@ -1,19 +1,19 @@
 # All Killer, No Filler PinHP rom sorter
 
-Put this script in your PinHP advmame_roms folder, along with a full Non-Merged Mame 0.106 romset
+Put this script in your PinHP advmame_roms folder, along with a full **Non-Merged** Mame 0.106 romset
 
 Run './rom-sorter.sh' and it will organise them into folders, choosing only the best quality games based on work by members of the arcadecontrols.com forum here: 
 http://forum.arcadecontrols.com/index.php/topic,149708.0.html
 
 Best games from each genre will be moved into their own subfolders:
 
+- Beat 'em ups
 - Classics
 - Platformers
-- Beat 'em ups
-- Run and gun
 - Puzzle
-- Sports
+- Run and gun
 - Shoot 'em ups
+- Sports
 - Vs Fighting
 
 Everything else will be put in a hidden '[Leftovers]' folder
