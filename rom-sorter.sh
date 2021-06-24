@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Put this script in you PinHP advmame_roms folder, along with a full romset
-# Run './rom-sorter.sh' and it will organise them into folders, based
-# on work by members of the arcadecontrols.com forum here: 
+# Run this script from PinHP menu and it will organise games into folders,
+# based on work by members of the arcadecontrols.com forum here: 
 # http://forum.arcadecontrols.com/index.php/topic,149708.0.html
 # Best games from each genre will be moved into their own subfolders
 # Everything else will be put in a hidden '[Leftovers]' folder
@@ -11,52 +10,75 @@
 # WARNING - this will remove any custom folders you had set up before running this script!!! 
 ##############################################################################################
 
-TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
+#Change to use the google sheet if you want very latest updates
+#TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
+TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 
-FILE=_games.template
-if [ -f "$FILE" ]; then
-    echo "Confirmed script is running in PinHP roms folder"
+#Get current rom path from pinhp variables output - if it exists
+VARFILE="/tmp/pinhp_variables"
+if [ -e "$VARFILE" ]; then
+	ROMS_ADVM=$( grep "ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
+	CONFIGFILE=$( grep "CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
+	cd $ROMS_ADVM
+fi
+
+#File to check for in the rom path
+FILE="_games.template"
+
+if [ -f $FILE ]; then
+    echo "Confirmed script is acting on PinHP roms folder"
 else 
     echo "$FILE does not exist - this must not be the PinHP rom folder."
 	echo "Aborting script to avoid disaster"
+	sleep 2
 	exit 1
 fi
 
-read -p "Are you ready? Any existing rom folders will be removed and replaced by this script [y,n] " -n 1 -r
-echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-fi
 
-read -p "Would you like to use online source for latest selections? [y,n] " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+dialog --title "Rom sorter" \
+--yesno "Are you ready? 
+
+This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
+
+Any existing rom folders will be replaced/updated." 15 30
+response=$?
+case $response in
+   0) echo "Yes";;
+   1) clear; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 ;; # handle exits from shell or function but don't exit interactive shell
+   255) clear; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 ;;
+esac
+
+dialog --title "Rom sorter" \
+--yesno "Get latest and best game recommendations list from github?
+
+Answer 'no' to use offline" 11 30
+response=$?
+case $response in
+   0)
 	if ping -q -c 1 -W 1 google.com >/dev/null; then
-	  echo "The network is up"
+	  #echo "The network is up"
 	  ONLINE=true
 	else
-	  echo "The network is down"
-	  [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-	fi
-else
-	ONLINE=false
-fi
+	  clear; echo "The network is down"; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
+	fi ;;
+   1) ONLINE=false ;;
+   255) clear; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 ;;
+esac
 
 # Move everything back into the root roms dir so we can start from scratch
-echo "Getting ready - moving everything back to main dir from any existing folders ..."
-find . -mindepth 2 -type f -print -exec mv {} . \; > /dev/null
-
+find . -mindepth 2 -type f -print -exec mv {} . \; | \
+dialog --title "Rom sorter" \
+--progressbox "Getting ready - moving everything back to main dir from any existing folders ..." 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
 
+
 #=========== BIOS files ==============================================================
 
-# First, move all the bios files to one place
-# We will later copy all of these into each game genre folder
-# ... because we don't know which might be required, and they don't take much space
-echo "Moving BIOS files aside ..."
+# First, move all the bios files to a hidden folder
+
+dialog --title "Rom sorter" \
+--infobox "Moving BIOS files aside ..." 7 30
 
 mkdir ".BIOS"
 
@@ -72,7 +94,7 @@ else
 	mv cpzn1.zip	".BIOS"	# ZN1
 	mv cpzn2.zip	".BIOS"	# ZN2
 	mv crysbios.zip	".BIOS"	# Crystal System BIOS
-	mv cvs.zip		".BIOS"	# CVS Bios
+	mv cvs.zip	".BIOS"	# CVS Bios
 	mv decocass.zip	".BIOS"	# Cassette System
 	mv hng64.zip	".BIOS"	# Hyper NeoGeo 64 Bios
 	mv konamigv.zip	".BIOS"	# Baby Phoenix-GV System
@@ -82,21 +104,23 @@ else
 	mv megaplay.zip	".BIOS"	# Mega Play BIOS
 	mv megatech.zip	".BIOS"	# Mega-Tech BIOS
 	mv neogeo.zip	".BIOS"	# Neo-Geo
-	mv nss.zip		".BIOS"	# Nintendo Super System BIOS
-	mv pgm.zip		".BIOS"	# PGM (Polygame Master) System BIOS
+	mv nss.zip	".BIOS"	# Nintendo Super System BIOS
+	mv pgm.zip	".BIOS"	# PGM (Polygame Master) System BIOS
 	mv playch10.zip	".BIOS"	# PlayChoice-10 BIOS
 	mv psarc95.zip	".BIOS"	# PS Arcade 95
-	mv skns.zip		".BIOS"	# Super Kaneko Nova System BIOS
+	mv skns.zip	".BIOS"	# Super Kaneko Nova System BIOS
 	mv stvbios.zip	".BIOS"	# ST-V Bios
 	mv taitofx1.zip	".BIOS"	# Taito FX1
 	mv taitogn.zip	".BIOS"	# Taito GNET
-	mv tps.zip		".BIOS"	# TPS
+	mv tps.zip	".BIOS"	# TPS
 fi
 
 
 #=========== Beat em ups ==============================================================
 
-echo "Finding the best beat em ups ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best beat em ups ..." 7 30
+
 mkdir "Beat em ups"
 
 if $ONLINE
@@ -109,7 +133,7 @@ else
 	mv armwar.zip	"Beat em ups"	# Armored Warriors (Euro 941024)
 	mv astorm.zip	"Beat em ups"	# Alien Storm (set 4, 2 Players, FD1094 317-?)
 	mv avengers.zip	"Beat em ups"	# Avengers (US set 1)
-	mv avsp.zip		"Beat em ups"	# Alien vs. Predator (Euro 940520)
+	mv avsp.zip	"Beat em ups"	# Alien vs. Predator (Euro 940520)
 	mv baddudes.zip	"Beat em ups"	# Bad Dudes vs. Dragonninja (US)
 	mv batcir.zip	"Beat em ups"	# Battle Circuit (Euro 970319)
 	mv bmaster.zip	"Beat em ups"	# Blade Master (World)
@@ -126,13 +150,13 @@ else
 	mv ddsom.zip	"Beat em ups"	# Dungeons & Dragons: Shadow over Mystara (Euro 960619)
 	mv ddtod.zip	"Beat em ups"	# Dungeons & Dragons: Tower of Doom (Euro 940412)
 	mv denjinmk.zip	"Beat em ups"	# Denjin Makai
-	mv dino.zip		"Beat em ups"	# Cadillacs and Dinosaurs (World 930201)
+	mv dino.zip	"Beat em ups"	# Cadillacs and Dinosaurs (World 930201)
 	mv dynwar.zip	"Beat em ups"	# Dynasty Wars (World)
 	mv edrandy.zip	"Beat em ups"	# The Cliffhanger - Edward Randy (World revision 2)
 	mv eightman.zip	"Beat em ups"	# Eight Man
 	mv ffight.zip	"Beat em ups"	# Final Fight (World)
-	mv ga2.zip		"Beat em ups"	# Golden Axe: The Revenge of Death Adder (World)
-	mv gaia.zip		"Beat em ups"	# Gaia Crusaders
+	mv ga2.zip	"Beat em ups"	# Golden Axe: The Revenge of Death Adder (World)
+	mv gaia.zip	"Beat em ups"	# Gaia Crusaders
 	mv gaiapols.zip	"Beat em ups"	# Gaiapolis (ver EAF)
 	mv ganryu.zip	"Beat em ups"	# Ganryu / Musashi Ganryuki
 	mv gauntdl.zip	"Beat em ups"	# Gauntlet Dark Legacy (version DL 2.52)
@@ -140,12 +164,12 @@ else
 	mv goldnaxe.zip	"Beat em ups"	# Golden Axe (set 6, US, 8751 317-123A)
 	mv grdians.zip	"Beat em ups"	# Guardians / Denjin Makai II
 	mv growl.zip	"Beat em ups"	# Growl (World)
-	mv hook.zip		"Beat em ups"	# Hook (World)
+	mv hook.zip	"Beat em ups"	# Hook (World)
 	mv kbash.zip	"Beat em ups"	# Knuckle Bash
 	mv knights.zip	"Beat em ups"	# Knights of the Round (World 911127)
-	mv kod.zip		"Beat em ups"	# The King of Dragons (World 910711)
-	mv kov.zip		"Beat em ups"	# Knights of Valour / Sangoku Senki (ver. 117)
-	mv kov2.zip		"Beat em ups"	# Knights of Valour 2
+	mv kod.zip	"Beat em ups"	# The King of Dragons (World 910711)
+	mv kov.zip	"Beat em ups"	# Knights of Valour / Sangoku Senki (ver. 117)
+	mv kov2.zip	"Beat em ups"	# Knights of Valour 2
 	mv lightbr.zip	"Beat em ups"	# Light Bringer (Ver 2.1J 1994/02/18)
 	mv metamrph.zip	"Beat em ups"	# Metamorphic Force (ver EAA)
 	mv mp_sor2.zip	"Beat em ups"	# Streets of Rage II (Mega Play)
@@ -155,7 +179,7 @@ else
 	mv ninjak.zip	"Beat em ups"	# The Ninja Kids (World)
 	mv nslasher.zip	"Beat em ups"	# Night Slashers (Korea Rev 1.3)
 	mv orlegend.zip	"Beat em ups"	# Oriental Legend / Xi Yo Gi Shi Re Zuang (ver. 126)
-	mv pow.zip		"Beat em ups"	# P.O.W. - Prisoners of War (US)
+	mv pow.zip	"Beat em ups"	# P.O.W. - Prisoners of War (US)
 	mv pulirula.zip	"Beat em ups"	# PuLiRuLa (World)
 	mv punisher.zip	"Beat em ups"	# The Punisher (World 930422)
 	mv riotcity.zip	"Beat em ups"	# Riot City (Japan)
@@ -179,15 +203,16 @@ else
 	mv viostorm.zip	"Beat em ups"	# Violent Storm (ver EAB)
 	mv warriorb.zip	"Beat em ups"	# Warrior Blade - Rastan Saga Episode III (Japan)
 	mv wizdfire.zip	"Beat em ups"	# Wizard Fire (US v1.1)
-	mv wof.zip		"Beat em ups"	# Warriors of Fate (World 921002)
+	mv wof.zip	"Beat em ups"	# Warriors of Fate (World 921002)
 	mv xmen2p.zip	"Beat em ups"	# X-Men (2 Players ver AAA)
 fi
 
 #=========== Classics ==============================================================
 
-echo "Finding the classics ..."
-mkdir "Classics"
+dialog --title "Rom sorter" \
+--infobox "Finding the classics ..." 7 30
 
+mkdir "Classics"
 
 if $ONLINE
 then
@@ -219,12 +244,12 @@ else
 	mv dowild.zip	"Classics"	# Mr. Do's Wild Ride
 	mv drmicro.zip	"Classics"	# Dr. Micro
 	mv elevator.zip	"Classics"	# Elevator Action
-	mv eyes.zip		"Classics"	# Eyes (Digitrex Techstar)
+	mv eyes.zip	"Classics"	# Eyes (Digitrex Techstar)
 	mv frogger.zip	"Classics"	# Frogger
 	mv galaga.zip	"Classics"	# Galaga (Namco rev. B)
 	mv galaxian.zip	"Classics"	# Galaxian (Namco set 1)
 	mv gauntlet.zip	"Classics"	# Gauntlet (rev 14)
-	mv gorf.zip		"Classics"	# Gorf
+	mv gorf.zip	"Classics"	# Gorf
 	mv gyruss.zip	"Classics"	# Gyruss (Konami)
 	mv invaders.zip	"Classics"	# Space Invaders
 	mv jjack.zip	"Classics"	# Jumping Jack
@@ -241,7 +266,7 @@ else
 	mv milliped.zip	"Classics"	# Millipede
 	mv mooncrst.zip	"Classics"	# Moon Cresta (Nichibutsu)
 	mv mpatrol.zip	"Classics"	# Moon Patrol
-	mv mrdo.zip		"Classics"	# Mr. Do!
+	mv mrdo.zip	"Classics"	# Mr. Do!
 	mv mspacman.zip	"Classics"	# Ms. Pac-Man
 	mv mspacmnf.zip	"Classics"	# Ms. Pac-Man (with speedup hack)
 	mv mtrap.zip	"Classics"	# Mouse Trap (version 5)
@@ -274,14 +299,16 @@ else
 	mv timber.zip	"Classics"	# Timber
 	mv tutankhm.zip	"Classics"	# Tutankham
 	mv vanguard.zip	"Classics"	# Vanguard (SNK)
-	mv wow.zip		"Classics"	# Wizard of Wor
+	mv wow.zip	"Classics"	# Wizard of Wor
 	mv zaxxon.zip	"Classics"	# Zaxxon (set 1)
 	mv zookeep.zip	"Classics"	# Zoo Keeper (set 1)
 fi
 
 #=========== Platformers ==============================================================
 
-echo "Finding the best platformers .."
+dialog --title "Rom sorter" \
+--infobox "Finding the best platformers ..." 7 30
+
 mkdir "Platformers"
 
 if $ONLINE
@@ -306,7 +333,7 @@ else
 	mv drgnbstr.zip	"Platformers"	# Dragon Buster
 	mv dynagear.zip	"Platformers"	# Dyna Gear
 	mv ghouls.zip	"Platformers"	# Ghouls'n Ghosts (World)
-	mv gng.zip		"Platformers"	# Ghosts'n Goblins (World? set 1)
+	mv gng.zip	"Platformers"	# Ghosts'n Goblins (World? set 1)
 	mv hcastle.zip	"Platformers"	# Haunted Castle (version M)
 	mv hharry.zip	"Platformers"	# Hammerin' Harry (World)
 	mv indytemp.zip	"Platformers"	# Indiana Jones and the Temple of Doom (set 1)
@@ -326,8 +353,8 @@ else
 	mv msword.zip	"Platformers"	# Magic Sword - Heroic Fantasy (World 900725)
 	mv mtwins.zip	"Platformers"	# Mega Twins (World 900619)
 	mv mystwarr.zip	"Platformers"	# Mystic Warriors (ver EAA)
-	mv nemo.zip		"Platformers"	# Nemo (World 901130)
-	mv nitd.zip		"Platformers"	# Nightmare in the Dark
+	mv nemo.zip	"Platformers"	# Nemo (World 901130)
+	mv nitd.zip	"Platformers"	# Nightmare in the Dark
 	mv nspirit.zip	"Platformers"	# Ninja Spirit
 	mv osman.zip	"Platformers"	# Osman (World)
 	mv pacland.zip	"Platformers"	# Pac-Land (set 1)
@@ -348,22 +375,24 @@ else
 	mv teddybb.zip	"Platformers"	# TeddyBoy Blues (New Ver.)
 	mv thoop.zip	"Platformers"	# Thunder Hoop (Ver. 1)
 	mv tigeroad.zip	"Platformers"	# Tiger Road (US)
-	mv tnzs.zip		"Platformers"	# The NewZealand Story (World, newer)
-	mv toki.zip		"Platformers"	# Toki (World set 1)
+	mv tnzs.zip	"Platformers"	# The NewZealand Story (World, newer)
+	mv toki.zip	"Platformers"	# Toki (World set 1)
 	mv tophuntr.zip	"Platformers"	# Top Hunter - Roddy & Cathy (set 1)
 	mv trojan.zip	"Platformers"	# Trojan (US)
 	mv tumblep.zip	"Platformers"	# Tumble Pop (World)
 	mv wardner.zip	"Platformers"	# Wardner (World)
-	mv wb3.zip		"Platformers"	# Wonder Boy III - Monster Lair (set 5, World, System 16B, 8751 317-0098)
-	mv wbml.zip		"Platformers"	# Wonder Boy in Monster Land (Japan New Ver.)
-	mv wboy.zip		"Platformers"	# Wonder Boy (set 1, new encryption)
+	mv wb3.zip	"Platformers"	# Wonder Boy III - Monster Lair (set 5, World, System 16B, 8751 317-0098)
+	mv wbml.zip	"Platformers"	# Wonder Boy in Monster Land (Japan New Ver.)
+	mv wboy.zip	"Platformers"	# Wonder Boy (set 1, new encryption)
 	mv willow.zip	"Platformers"	# Willow (US)
-	mv wiz.zip		"Platformers"	# Wiz
+	mv wiz.zip	"Platformers"	# Wiz
 fi
 
 #=========== Puzzle ==============================================================
 
-echo "Finding the best puzzle games ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best puzzle games ..." 7 30
+
 mkdir "Puzzle"
 
 if $ONLINE
@@ -386,7 +415,7 @@ else
 	mv ghostlop.zip	"Puzzle"	# Ghostlop (prototype)
 	mv htchctch.zip	"Puzzle"	# Hatch Catch
 	mv joyjoy.zip	"Puzzle"	# Puzzled / Joy Joy Kid
-	mv klax.zip		"Puzzle"	# Klax (set 1)
+	mv klax.zip	"Puzzle"	# Klax (set 1)
 	mv landmakr.zip	"Puzzle"	# Land Maker (Ver 2.01J 1998/06/01)
 	mv locomotn.zip	"Puzzle"	# Loco-Motion
 	mv magdrop3.zip	"Puzzle"	# Magical Drop III
@@ -404,7 +433,7 @@ else
 	mv puzzledp.zip	"Puzzle"	# Puzzle De Pon!
 	mv puzzli2.zip	"Puzzle"	# Puzzli 2 Super
 	mv puzzloop.zip	"Puzzle"	# Puzz Loop (Europe)
-	mv qix.zip		"Puzzle"	# Qix (set 1)
+	mv qix.zip	"Puzzle"	# Qix (set 1)
 	mv riskchal.zip	"Puzzle"	# Risky Challenge
 	mv senkyu.zip	"Puzzle"	# Senkyu (Japan)
 	mv spang.zip	"Puzzle"	# Super Pang (World 900914)
@@ -417,7 +446,9 @@ fi
 
 #=========== Run and gun ==============================================================
 
-echo "Finding the best Run and gun games ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best Run and gun games ..." 7 30
+
 mkdir "Run and gun"
 
 if $ONLINE
@@ -451,7 +482,7 @@ else
 	mv gunforc2.zip	"Run and gun"	# Gunforce 2 (US)
 	mv gunforce.zip	"Run and gun"	# Gunforce - Battle Fire Engulfed Terror Island (World)
 	mv gunsmoke.zip	"Run and gun"	# Gun.Smoke (World)
-	mv gwar.zip		"Run and gun"	# Guerrilla War (US)
+	mv gwar.zip	"Run and gun"	# Guerrilla War (US)
 	mv hbarrel.zip	"Run and gun"	# Heavy Barrel (US)
 	mv ikari.zip	"Run and gun"	# Ikari Warriors (US)
 	mv ikari3.zip	"Run and gun"	# Ikari III - The Rescue (Rotary Joystick)
@@ -464,7 +495,7 @@ else
 	mv mslug5.zip	"Run and gun"	# Metal Slug 5
 	mv mslugx.zip	"Run and gun"	# Metal Slug X - Super Vehicle-001
 	mv nam1975.zip	"Run and gun"	# NAM-1975
-	mv narc.zip		"Run and gun"	# Narc (rev 7.00)
+	mv narc.zip	"Run and gun"	# Narc (rev 7.00)
 	mv ncommand.zip	"Run and gun"	# Ninja Commando
 	mv oscar.zip	"Run and gun"	# Psycho-Nics Oscar (US)
 	mv outzone.zip	"Run and gun"	# Out Zone (set 1)
@@ -489,16 +520,18 @@ fi
 
 #=========== Shoot em ups ==============================================================
 
-echo "Finding the best shoot em ups ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best shoot em ups ..." 7 30
+
 mkdir "Shoot em ups"
 
 if $ONLINE
 then
 	bash <(curl -s -L $TSVINPUT | cut -f7)
 else
-	mv 1942.zip		"Shoot em ups"	# 1942 (set 1)
-	mv 1943.zip		"Shoot em ups"	# 1943: The Battle of Midway (US)
-	mv 19xx.zip		"Shoot em ups"	# 19XX: The War Against Destiny (US 951207)
+	mv 1942.zip	"Shoot em ups"	# 1942 (set 1)
+	mv 1943.zip	"Shoot em ups"	# 1943: The Battle of Midway (US)
+	mv 19xx.zip	"Shoot em ups"	# 19XX: The War Against Destiny (US 951207)
 	mv agallet.zip	"Shoot em ups"	# Air Gallet
 	mv airbustr.zip	"Shoot em ups"	# Air Buster: Trouble Specialty Raid Unit (World)
 	mv alpham2.zip	"Shoot em ups"	# Alpha Mission II / ASO II - Last Guardian
@@ -529,14 +562,14 @@ else
 	mv dariusg.zip	"Shoot em ups"	# Darius Gaiden - Silver Hawk (Ver 2.5O 1994/09/19)
 	mv dbreed.zip	"Shoot em ups"	# Dragon Breed (M81 pcb version)
 	mv ddonpach.zip	"Shoot em ups"	# DoDonPachi (International)
-	mv ddp2.zip		"Shoot em ups"	# Bee Storm - DoDonPachi II
+	mv ddp2.zip	"Shoot em ups"	# Bee Storm - DoDonPachi II
 	mv desertwr.zip	"Shoot em ups"	# Desert War / Wangan Sensou
 	mv dimahoo.zip	"Shoot em ups"	# Dimahoo (US 000121)
 	mv dogyuun.zip	"Shoot em ups"	# Dogyuun
 	mv dragnblz.zip	"Shoot em ups"	# Dragon Blaze
 	mv dspirit.zip	"Shoot em ups"	# Dragon Spirit (new version)
 	mv ecofghtr.zip	"Shoot em ups"	# Eco Fighters (World 931203)
-	mv edf.zip		"Shoot em ups"	# E.D.F. : Earth Defense Force
+	mv edf.zip	"Shoot em ups"	# E.D.F. : Earth Defense Force
 	mv esprade.zip	"Shoot em ups"	# ESP Ra.De. (International Ver 1998 4/22)
 	mv fantjour.zip	"Shoot em ups"	# Fantastic Journey
 	mv feversos.zip	"Shoot em ups"	# Fever SOS (International)
@@ -572,11 +605,11 @@ else
 	mv metalb.zip	"Shoot em ups"	# Metal Black (World)
 	mv mmatrix.zip	"Shoot em ups"	# Mars Matrix: Hyper Solid Shooting (US 000412)
 	mv mysticri.zip	"Shoot em ups"	# Mystic Riders (World)
-	mv ncv1.zip		"Shoot em ups"	# Namco Classics Collection Vol.1
+	mv ncv1.zip	"Shoot em ups"	# Namco Classics Collection Vol.1
 	mv nemesis.zip	"Shoot em ups"	# Nemesis
-	mv nost.zip		"Shoot em ups"	# Nostradamus
+	mv nost.zip	"Shoot em ups"	# Nostradamus
 	mv ordyne.zip	"Shoot em ups"	# Ordyne (Japan, English Version)
-	mv p47.zip		"Shoot em ups"	# P-47 - The Phantom Fighter (World)
+	mv p47.zip	"Shoot em ups"	# P-47 - The Phantom Fighter (World)
 	mv p47aces.zip	"Shoot em ups"	# P-47 Aces
 	mv parodius.zip	"Shoot em ups"	# Parodius DA! (World)
 	mv phelios.zip	"Shoot em ups"	# Phelios (Japan)
@@ -609,7 +642,7 @@ else
 	mv soldivid.zip	"Shoot em ups"	# Sol Divide - The Sword Of Darkness
 	mv sonicwi2.zip	"Shoot em ups"	# Aero Fighters 2 / Sonic Wings 2
 	mv spacedx.zip	"Shoot em ups"	# Space Invaders DX (US) v2.1
-	mv ssi.zip		"Shoot em ups"	# Super Space Invaders '91 (World)
+	mv ssi.zip	"Shoot em ups"	# Super Space Invaders '91 (World)
 	mv sstriker.zip	"Shoot em ups"	# Sorcer Striker (World)
 	mv stdragon.zip	"Shoot em ups"	# Saint Dragon
 	mv stmblade.zip	"Shoot em ups"	# Storm Blade (US)
@@ -646,7 +679,9 @@ fi
 
 #=========== Sports ==============================================================
 
-echo "Finding the best sports games ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best sports games ..." 7 30
+
 mkdir "Sports"
 
 if $ONLINE
@@ -661,7 +696,7 @@ else
 	mv blitz.zip	"Sports"	# NFL Blitz (boot ROM 1.2)
 	mv bssoccer.zip	"Sports"	# Back Street Soccer
 	mv bstars2.zip	"Sports"	# Baseball Stars 2
-	mv cbaj.zip		"Sports"	# Cool Boarders Arcade Jam
+	mv cbaj.zip	"Sports"	# Cool Boarders Arcade Jam
 	mv cbasebal.zip	"Sports"	# Capcom Baseball (Japan)
 	mv clshroad.zip	"Sports"	# Clash-Road
 	mv csclub.zip	"Sports"	# Capcom Sports Club (Euro 970722)
@@ -672,7 +707,7 @@ else
 	mv fbfrenzy.zip	"Sports"	# Football Frenzy
 	mv flipshot.zip	"Sports"	# Battle Flip Shot
 	mv footchmp.zip	"Sports"	# Football Champ (World)
-	mv gtmr.zip		"Sports"	# 1000 Miglia: Great 1000 Miles Rally (94/07/18)
+	mv gtmr.zip	"Sports"	# 1000 Miglia: Great 1000 Miles Rally (94/07/18)
 	mv hattrick.zip	"Sports"	# Hat Trick
 	mv hvysmsh.zip	"Sports"	# Heavy Smash (Japan version -2)
 	mv hyperath.zip	"Sports"	# Hyper Athlete (GV021 JAPAN 1.00)
@@ -714,7 +749,7 @@ else
 	mv ultennis.zip	"Sports"	# Ultimate Tennis
 	mv vball.zip	"Sports"	# U.S. Championship V'ball (set 1)
 	mv waterski.zip	"Sports"	# Water Ski
-	mv wc90.zip		"Sports"	# Tecmo World Cup '90 (set 1)
+	mv wc90.zip	"Sports"	# Tecmo World Cup '90 (set 1)
 	mv wg3dh.zip	"Sports"	# Wayne Gretzky's 3D Hockey
 	mv winspike.zip	"Sports"	# Winning Spike (ver EAA)
 	mv wjammers.zip	"Sports"	# Windjammers / Flying Power Disc
@@ -724,14 +759,16 @@ fi
 
 #=========== Vs Fighting ==============================================================
 
-echo "Finding the best Vs fighting games ..."
+dialog --title "Rom sorter" \
+--infobox "Finding the best Vs fighting games ..." 7 30
+
 mkdir "Vs Fighting"
 
 if $ONLINE
 then
 	bash <(curl -s -L $TSVINPUT | cut -f9)
 else
-	mv aof3.zip		"Vs Fighting"	# Art of Fighting 3 - The Path of the Warrior / Art of Fighting - Ryuuko no Ken Gaiden
+	mv aof3.zip	"Vs Fighting"	# Art of Fighting 3 - The Path of the Warrior / Art of Fighting - Ryuuko no Ken Gaiden
 	mv bldyror2.zip	"Vs Fighting"	# Bloody Roar 2 (JAPAN)
 	mv bloodwar.zip	"Vs Fighting"	# Blood Warrior
 	mv breakrev.zip	"Vs Fighting"	# Breakers Revenge
@@ -744,38 +781,38 @@ else
 	mv garou.zip	"Vs Fighting"	# Garou - Mark of the Wolves (set 1)
 	mv gaxeduel.zip	"Vs Fighting"	# Golden Axe - The Duel (JUETL 950117 V1.000)
 	mv gundamex.zip	"Vs Fighting"	# Mobile Suit Gundam EX Revue
-	mv jojo.zip		"Vs Fighting"	# JoJo's Venture / JoJo no Kimyouna Bouken
+	mv jojo.zip	"Vs Fighting"	# JoJo's Venture / JoJo no Kimyouna Bouken
 	mv kinst.zip	"Vs Fighting"	# Killer Instinct (v1.5d)
 	mv kizuna.zip	"Vs Fighting"	# Kizuna Encounter - Super Tag Battle / Fu'un Super Tag Battle
 	mv kof2000.zip	"Vs Fighting"	# The King of Fighters 2000
 	mv kof96.zip	"Vs Fighting"	# The King of Fighters '96 (set 1)
 	mv kof98.zip	"Vs Fighting"	# The King of Fighters '98 - The Slugfest / King of Fighters '98 - dream match never ends
 	mv lastbld2.zip	"Vs Fighting"	# Last Blade 2 / Bakumatsu Roman - Dai Ni Maku Gekka no Kenshi, The
-	mv mace.zip		"Vs Fighting"	# Mace: The Dark Age (boot ROM 1.0ce, HDD 1.0b)
+	mv mace.zip	"Vs Fighting"	# Mace: The Dark Age (boot ROM 1.0ce, HDD 1.0b)
 	mv macea.zip	"Vs Fighting"	# Mace: The Dark Age (HDD 1.0a
 	mv martmast.zip	"Vs Fighting"	# Martial Masters
 	mv matrim.zip	"Vs Fighting"	# Matrimelee / Shin Gouketsuji Ichizoku Toukon
 	mv megaman2.zip	"Vs Fighting"	# Mega Man 2: The Power Fighters (US 960708)
 	mv metmqstr.zip	"Vs Fighting"	# Metamoqester
-	mv mk2.zip		"Vs Fighting"	# Mortal Kombat II (rev L3.1)
-	mv msh.zip		"Vs Fighting"	# Marvel Super Heroes (Euro 951024)
+	mv mk2.zip	"Vs Fighting"	# Mortal Kombat II (rev L3.1)
+	mv msh.zip	"Vs Fighting"	# Marvel Super Heroes (Euro 951024)
 	mv mshvsf.zip	"Vs Fighting"	# Marvel Super Heroes Vs. Street Fighter (Euro 970625)
 	mv mtlchamp.zip	"Vs Fighting"	# Martial Champion (ver EAB)
-	mv mvsc.zip		"Vs Fighting"	# Marvel Vs. Capcom: Clash of Super Heroes (Euro 980112)
+	mv mvsc.zip	"Vs Fighting"	# Marvel Vs. Capcom: Clash of Super Heroes (Euro 980112)
 	mv nwarr.zip	"Vs Fighting"	# Night Warriors: Darkstalkers' Revenge (US 950406)
 	mv outfxies.zip	"Vs Fighting"	# Outfoxies
 	mv plsmaswd.zip	"Vs Fighting"	# Plasma Sword (USA 980316)
 	mv primrage.zip	"Vs Fighting"	# Primal Rage (version 2.3)
 	mv rbff2.zip	"Vs Fighting"	# Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (set 1)
 	mv ringdest.zip	"Vs Fighting"	# Ring of Destruction: Slammasters II (Euro 940902)
-	mv rotd.zip		"Vs Fighting"	# Rage of the Dragons
+	mv rotd.zip	"Vs Fighting"	# Rage of the Dragons
 	mv rvschool.zip	"Vs Fighting"	# Rival Schools (USA 971117)
 	mv samsh5sp.zip	"Vs Fighting"	# Samurai Shodown V Special / Samurai Spirits Zero Special (set 1, uncensored)
 	mv samsho2.zip	"Vs Fighting"	# Samurai Shodown II / Shin Samurai Spirits - Haohmaru jigokuhen
 	mv samsho3.zip	"Vs Fighting"	# Samurai Shodown III / Samurai Spirits - Zankurou Musouken (set 1)
 	mv sf2ce.zip	"Vs Fighting"	# Street Fighter II' - Champion Edition (World 920313)
-	mv sfa2.zip		"Vs Fighting"	# Street Fighter Alpha 2 (US 960306)
-	mv sfa3.zip		"Vs Fighting"	# Street Fighter Alpha 3 (US 980904)
+	mv sfa2.zip	"Vs Fighting"	# Street Fighter Alpha 2 (US 960306)
+	mv sfa3.zip	"Vs Fighting"	# Street Fighter Alpha 3 (US 980904)
 	mv sfex2p.zip	"Vs Fighting"	# Street Fighter EX 2 Plus (USA 990611)
 	mv sfexa.zip	"Vs Fighting"	# Street Fighter EX (ASIA 961219)
 	mv sfiii3.zip	"Vs Fighting"	# Street Fighter III 3rd Strike: Fight for the Future
@@ -783,27 +820,34 @@ else
 	mv soulclbr.zip	"Vs Fighting"	# Soul Calibur (SOC14/VER.C)
 	mv ssf2t.zip	"Vs Fighting"	# Super Street Fighter II Turbo (World 940223)
 	mv starglad.zip	"Vs Fighting"	# Star Gladiator (USA 960627)
-	mv svc.zip		"Vs Fighting"	# SvC Chaos - SNK vs Capcom (MVS)
+	mv svc.zip	"Vs Fighting"	# SvC Chaos - SNK vs Capcom (MVS)
 	mv tekken2.zip	"Vs Fighting"	# Tekken 2 Ver.B (TES3/VER.B)
 	mv tekken3.zip	"Vs Fighting"	# Tekken 3 (TET1/VER.E1)
 	mv tektagt.zip	"Vs Fighting"	# Tekken Tag Tournament (TEG3/VER.C1)
-	mv ts2.zip		"Vs Fighting"	# Battle Arena Toshinden 2 (USA 951124)
-	mv umk3.zip		"Vs Fighting"	# Ultimate Mortal Kombat 3 (rev 1.2)
-	mv vf.zip		"Vs Fighting"	# Virtua Fighter
-	mv vsav.zip		"Vs Fighting"	# Vampire Savior: The Lord of Vampire (Euro 970519)
+	mv ts2.zip	"Vs Fighting"	# Battle Arena Toshinden 2 (USA 951124)
+	mv umk3.zip	"Vs Fighting"	# Ultimate Mortal Kombat 3 (rev 1.2)
+	mv vf.zip	"Vs Fighting"	# Virtua Fighter
+	mv vsav.zip	"Vs Fighting"	# Vampire Savior: The Lord of Vampire (Euro 970519)
 	mv wakuwak7.zip	"Vs Fighting"	# Waku Waku 7
-	mv whp.zip		"Vs Fighting"	# World Heroes Perfect
+	mv whp.zip	"Vs Fighting"	# World Heroes Perfect
 	mv xmcota.zip	"Vs Fighting"	# X-Men: Children of the Atom (Euro 950105)
 	mv xmvsf.zip	"Vs Fighting"	# X-Men Vs. Street Fighter (Euro 961004)
 fi
 
 #===========Everything else==============================================================
 
-echo "Moving everything else to a hidden [Leftovers] folder"
+dialog --title "Rom sorter" \
+--infobox "Moving everything else to a hidden [Leftovers] folder ..." 7 30
+
 mkdir "[Leftovers]"
 echo "#Hidden-folder" > [Leftovers]/.title 	#Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
 #cp .BIOS/*.zip	"[Leftovers]"
 mv *.zip	"[Leftovers]"
 rm .title # Delete unwanted .title folder from root of roms dir
+echo "custom_folders=Y" > /tmp/external_vars #Turn PinHP custom folders option 
+sed -i -e 's/custom_folders=./custom_folders=Y/' "$CONFIGFILE"
 
-echo "All done! Reboot to update menu ..."
+dialog --title "Rom sorter" \
+--msgbox "All done! " 7 30
+
+clear
