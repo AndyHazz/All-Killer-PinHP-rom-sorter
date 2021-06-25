@@ -28,7 +28,7 @@ FILE="_games.template"
 if [ -f $FILE ]; then
     echo "Confirmed script is acting on PinHP roms folder"
 else 
-    echo "$FILE does not exist - this must not be the PinHP rom folder."
+    echo "$FILE does not exist - failed check for PinHP rom folder."
 	echo "Aborting script to avoid disaster"
 	sleep 2
 	exit 1
