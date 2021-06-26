@@ -14,6 +14,11 @@
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 
+if ping -q -c 1 -W 1 github.com >/dev/null; then
+	#todo - figure out self updating script
+	#git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
+fi
+
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start ()
 {
