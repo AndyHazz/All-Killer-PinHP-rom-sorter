@@ -14,14 +14,99 @@
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 
+#Enable Jamma controls, if system is running on Pi2Jamma
+pikeyd165_start ()
+{
+  if [ $1 != "$pikeyd_current" ] && [ "$pi2scart_mode" != "Y" ]; then
+    pikeyd165_stop
+    pikeyd_current=$1
+    if [ ! -f "/etc/pikeyd165.conf" ]; then
+      cp /root/pikeyd165_default.conf /tmp/pikeyd165.conf
+      ln -sf /tmp/pikeyd165.conf /etc/pikeyd165.conf
+    fi
+
+    case $1 in
+      anykey )
+        cp /root/pikeyd165_anykey.conf /tmp/pikeyd165.conf
+      ;;
+      default )
+        cp /root/pikeyd165_default.conf /tmp/pikeyd165.conf
+      ;;
+      enterkey )
+        cp /root/pikeyd165_enterkey.conf /tmp/pikeyd165.conf
+      ;; 
+      updown )
+        cp /root/pikeyd165_updown.conf /tmp/pikeyd165.conf
+      ;;  
+      updowntabenter )
+        cp /root/pikeyd165_updowntabenter.conf /tmp/pikeyd165.conf
+      ;;
+      yesno )
+        cp /root/pikeyd165_yesno.conf /tmp/pikeyd165.conf
+      ;;
+      * )
+        cp /root/pikeyd165_default.conf /tmp/pikeyd165.conf
+      ;;
+    esac
+
+    /usr/bin/taskset -c 2 /root/pikeyd165 -ndb -d &> /dev/null
+    if [ ! -z $2 ]; then
+      sleep $2
+    fi
+  fi
+}
+
+# Disable Jamma keyboard daemon
+pikeyd165_stop ()
+{
+    /root/pikeyd165 -k &> /dev/null
+    killall pikeyd165 &> /dev/null
+}
+
+# Enable gamepad controls, required for dialog boxes
+joy2key_start ()
+{
+  case $1 in
+    anykey )
+      joy2key -config anykey &> /dev/null &
+    ;;
+    enterkey )
+      joy2key -config enterkey &> /dev/null &
+    ;;
+    yesno )
+      joy2key -config yesno &> /dev/null &
+    ;;
+    noaxis )
+      joy2key -config noaxis &> /dev/null &
+    ;;
+    escape )
+      joy2key -config escape &> /dev/null &
+    ;;
+    updown )
+      joy2key -config updown &> /dev/null &
+    ;;
+    updowntabenter )
+      joy2key -config updowntabenter &> /dev/null &
+    ;;
+  esac
+}
+
+# Disable gamepad controls
+joy2key_stop ()
+{
+  pkill joy2key &> /dev/null
+}
+
 #Get current rom path from pinhp variables output - if it exists
 VARFILE="/tmp/pinhp_variables"
 if [ -e "$VARFILE" ]; then
 	ROMS_ADVM=$( grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
 	CONFIGFILE=$( grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
+	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
 	cd $ROMS_ADVM
 fi
-
+cat $VARFILE >/tmp/vartest
+echo $pi2scart_mode >/tmp/pi2scartmode
 #File to check for in the rom path
 FILE="_games.template"
 
@@ -34,25 +119,27 @@ else
 	exit 1
 fi
 
+pikeyd165_start "yesno" "0.5"
 
+joy2key_start "yesno"
 dialog --title "Rom sorter" \
 --yesno "Are you ready? 
-
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
-
 Any existing rom folders will be replaced/updated." 15 30
 response=$?
+joy2key_stop
 case $response in
    0) echo "Yes";;
    1) clear; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 ;; # handle exits from shell or function but don't exit interactive shell
    255) clear; [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 ;;
 esac
 
+joy2key_start "yesno"
 dialog --title "Rom sorter" \
 --yesno "Get latest and best game recommendations list from github?
-
 Answer 'no' to use offline" 11 30
 response=$?
+joy2key_stop
 case $response in
    0)
 	if ping -q -c 1 -W 1 google.com >/dev/null; then
@@ -846,8 +933,11 @@ mv *.zip	"[Leftovers]"
 rm .title # Delete unwanted .title folder from root of roms dir
 echo "custom_folders=Y" > /tmp/external_vars #Turn PinHP custom folders option 
 sed -i -e 's/custom_folders=./custom_folders=Y/' "$CONFIGFILE"
+echo "pikeyd_current=" >> /tmp/external_vars #Clear variable to not confuse parent script
 
+joy2key_start "yesno"
 dialog --title "Rom sorter" \
 --msgbox "All done! " 7 30
+joy2key_stop
 
 clear
