@@ -124,7 +124,9 @@ pikeyd165_start "yesno" "0.5"
 joy2key_start "yesno"
 dialog --title "Rom sorter" \
 --yesno "Are you ready? 
+
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
+
 Any existing rom folders will be replaced/updated." 15 30
 response=$?
 joy2key_stop
