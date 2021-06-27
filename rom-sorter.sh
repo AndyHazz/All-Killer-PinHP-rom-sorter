@@ -134,6 +134,7 @@ if [ -e "$VARFILE" ]; then
 	ROMS_ADVM=$( grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
 	CONFIGFILE=$( grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
+	echo $RPI2JAMMA "and" $ROMS_ADVM
 	cd $RPI2JAMMA
 	auto-update()
 	cd $ROMS_ADVM
