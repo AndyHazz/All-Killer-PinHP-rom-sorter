@@ -146,7 +146,7 @@ fi
 pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
-dialog --title "Rom sorter" \
+dialog --title "Rom sorter (27-06-2021)" \
 --yesno "Are you ready? 
 
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
