@@ -17,7 +17,7 @@ ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="auto-update"
 SCRIPT="rom-sorter.sh"
-UPDATESTRING="27-06-2021 - 18:41" # This will show in the first dialog title for update confirmation
+UPDATESTRING="27-06-2021 - 19:01" # This will show in the first dialog title for update confirmation
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
@@ -25,13 +25,14 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 		rm "/tmp/aknf-gitcheck"
 	else
 		if [ -a "$REPO/.git" ]; then
-			echo "Git repo already exists"
+			echo "Git repo already exists in $(pwd)"
 			cd $REPO
 			git pull
 			cd ..
 		else
-			echo "Cloning git repo"
+			echo "Cloning git repo in $(pwd)"
 			git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
+			sleep 5
 		fi
 		cp $REPO/$SCRIPT $SCRIPT
 		touch "/tmp/aknf-gitcheck"
