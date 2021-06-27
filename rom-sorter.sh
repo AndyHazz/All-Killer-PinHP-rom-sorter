@@ -17,7 +17,7 @@ ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="auto-update"
 SCRIPT="rom-sorter.sh"
-UPDATESTRING="27-06-2021 - 19:53" # This will show in the first dialog title for update confirmation
+UPDATESTRING="27-06-2021" # This will show in the first dialog title for update confirmation
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start ()
