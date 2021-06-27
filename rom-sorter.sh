@@ -19,28 +19,6 @@ BRANCH="auto-update"
 SCRIPT="rom-sorter.sh"
 UPDATESTRING="27-06-2021 - 19:01" # This will show in the first dialog title for update confirmation
 
-if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
-	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
-		echo "We're good, update $UPDATESTRING has taken place"
-		rm "/tmp/aknf-gitcheck"
-	else
-		if [ -a "$REPO/.git" ]; then
-			echo "Git repo already exists in $(pwd)"
-			cd $REPO
-			git pull
-			cd ..
-		else
-			echo "Cloning git repo in $(pwd)"
-			git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
-			sleep 5
-		fi
-		cp $REPO/$SCRIPT $SCRIPT
-		touch "/tmp/aknf-gitcheck"
-		bash $SCRIPT
-		exit 0
-	fi
-fi
-
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start ()
 {
@@ -124,13 +102,43 @@ joy2key_stop ()
   pkill joy2key &> /dev/null
 }
 
+auto-update ()
+{
+	if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
+		if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
+			echo "We're good, update $UPDATESTRING has taken place"
+			rm "/tmp/aknf-gitcheck"
+		else
+			if [ -a "$REPO/.git" ]; then
+				echo "Git repo already exists in $(pwd)"
+				cd $REPO
+				git pull
+				cd ..
+			else
+				echo "Cloning git repo in $(pwd)"
+				git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
+				sleep 5
+			fi
+			cp $REPO/$SCRIPT $SCRIPT
+			touch "/tmp/aknf-gitcheck"
+			bash $SCRIPT
+			exit 0
+		fi
+	fi
+}
+
 #Get current rom path from pinhp variables output - if it exists
 VARFILE="/tmp/pinhp_variables"
 if [ -e "$VARFILE" ]; then
+	RPI2JAMMA=$( grep " RPI2JAMMA=" "$VARFILE" | awk -F'"' '{print $2}' )
 	ROMS_ADVM=$( grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
 	CONFIGFILE=$( grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
+	cd $RPI2JAMMA
+	auto-update()
 	cd $ROMS_ADVM
+else
+	auto-update()
 fi
 
 #File to check for in the rom path
