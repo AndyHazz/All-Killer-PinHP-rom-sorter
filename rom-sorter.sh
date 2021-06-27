@@ -34,6 +34,7 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then
 		fi
 		cp $REPO/rom-sorter.sh rom-sorter.sh
 		touch "/tmp/aknf-gitcheck"
+		echo "touched"
 	fi
 
 	exit 0
