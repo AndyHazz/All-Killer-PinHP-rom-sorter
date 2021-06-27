@@ -13,8 +13,7 @@
 #Change to use the google sheet if you want very latest updates
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
-ORIGIN="git@github.com"
-GITBOD="AndyHazz"
+ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="auto-update"
 SCRIPT="rom-sorter.sh"
@@ -31,7 +30,7 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 			cd ..
 		else
 			echo "Cloning git repo"
-			git clone --branch $BRANCH "$ORIGIN:$GITBOD/$REPO"
+			git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
 		fi
 		cp $REPO/$SCRIPT $SCRIPT
 		touch "/tmp/aknf-gitcheck"
