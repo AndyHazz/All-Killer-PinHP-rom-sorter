@@ -105,8 +105,8 @@ if [ -e "$VARFILE" ]; then
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
 	cd $ROMS_ADVM
 fi
-cat $VARFILE >/tmp/vartest
-echo $pi2scart_mode >/tmp/pi2scartmode
+
+
 #File to check for in the rom path
 FILE="_games.template"
 
