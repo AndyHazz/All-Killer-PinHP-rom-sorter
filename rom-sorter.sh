@@ -136,10 +136,10 @@ if [ -e "$VARFILE" ]; then
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
 	echo $RPI2JAMMA "and" $ROMS_ADVM
 	cd $RPI2JAMMA
-	auto-update()
+	auto-update
 	cd $ROMS_ADVM
 else
-	auto-update()
+	auto-update
 fi
 
 #File to check for in the rom path
