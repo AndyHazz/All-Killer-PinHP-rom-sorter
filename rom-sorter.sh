@@ -21,7 +21,7 @@ UPDATESTRING="27-06-2021 - 19:01" # This will show in the first dialog title for
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
-		echo "We're good, update has taken place"
+		echo "We're good, update $UPDATESTRING has taken place"
 		rm "/tmp/aknf-gitcheck"
 	else
 		if [ -a "$REPO/.git" ]; then
