@@ -15,6 +15,7 @@
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="main"
+SCRIPT="rom-sorter.sh"
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then
 
@@ -32,8 +33,9 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then
 			git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
 
 		fi
-		cp $REPO/rom-sorter.sh rom-sorter.sh
+		cp $REPO/$SCRIPT $SCRIPT
 		touch "/tmp/aknf-gitcheck"
+		./$SCRIPT
 	fi
 
 	exit 0
