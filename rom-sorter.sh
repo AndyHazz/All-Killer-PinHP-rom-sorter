@@ -15,8 +15,42 @@
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then
-	#todo - figure out self updating script
+	#todo - figure out self updating script - referenced from https://stackoverflow.com/questions/35365799/shell-script-self-update-using-git/35365800
 	#git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
+
+	if [ !- "All-Killer-PinHP-rom-sorter" ]; then
+		git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
+	fi
+
+	SCRIPT=$(readlink -f "$0")
+	SCRIPTPATH=$(dirname "$SCRIPT")
+	SCRIPTNAME="$0"
+	ARGS="$@"
+	BRANCH="auto-update"
+
+	self_update() {
+		cd $SCRIPTPATH
+		git fetch
+
+		[ -n $(git diff --name-only origin/$BRANCH | grep $SCRIPTNAME) ] && {
+			echo "Found a new version of me, updating myself..."
+			git pull --force
+			git checkout $BRANCH
+			git pull --force
+			echo "Running the new version..."
+			exec "$SCRIPTNAME" "$@"
+
+			# Now exit this old instance
+			exit 1
+		}
+		echo "Already the latest version."
+	}
+
+	main() {
+	echo "Running"
+	}
+
+	self_update
 fi
 
 #Enable Jamma controls, if system is running on Pi2Jamma
