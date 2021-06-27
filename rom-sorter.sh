@@ -20,7 +20,7 @@ SCRIPT="rom-sorter.sh"
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
-		echo "We're good"
+		echo "We're good, update has taken place"
 		rm "/tmp/aknf-gitcheck"
 	else
 		if [ -a "$REPO/.git" ]; then
