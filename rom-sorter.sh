@@ -18,7 +18,7 @@ BRANCH="main"
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then
 
-	if [ -f /tmp/akng-gitcheck ]; then # update has just run, get on with the script
+	if [ -a /tmp/akng-gitcheck ]; then # update has just run, get on with the script
 		echo "We're good"
 		rm "/tmp/aknf-gitcheck"
 	else
