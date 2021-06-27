@@ -34,7 +34,7 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 		fi
 		cp $REPO/$SCRIPT $SCRIPT
 		touch "/tmp/aknf-gitcheck"
-		./$SCRIPT
+		bash $SCRIPT
 		exit 0
 	fi
 fi
