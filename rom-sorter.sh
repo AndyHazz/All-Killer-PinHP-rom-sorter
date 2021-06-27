@@ -17,9 +17,8 @@ REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
 
-if ping -q -c 1 -W 1 github.com >/dev/null; then
-
-	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just run, get on with the script
+if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
+	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
 		echo "We're good"
 		rm "/tmp/aknf-gitcheck"
 	else
@@ -30,44 +29,13 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then
 			cd ..
 		else
 			echo "Cloning git repo"
-			git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
-
+			git clone https://github.com/AndyHazz/$REPO
 		fi
 		cp $REPO/$SCRIPT $SCRIPT
 		touch "/tmp/aknf-gitcheck"
 		./$SCRIPT
+		exit 0
 	fi
-
-	exit 0
-
-	SCRIPT=$(readlink -f "$0")
-	SCRIPTPATH=$(dirname "$SCRIPT")
-	SCRIPTNAME="$0"
-	ARGS="$@"
-
-	self_update() {
-		cd $SCRIPTPATH
-		git fetch
-
-		[ -n $(git diff --name-only origin/$BRANCH | grep $SCRIPTNAME) ] && {
-			echo "Found a new version of me, updating myself..."
-			git pull --force
-			git checkout $BRANCH
-			git pull --force
-			echo "Running the new version..."
-			exec "$SCRIPTNAME" "$@"
-
-			# Now exit this old instance
-			exit 1
-		}
-		echo "Already the latest version."
-	}
-
-	main() {
-	echo "Running"
-	}
-
-	self_update
 fi
 
 #Enable Jamma controls, if system is running on Pi2Jamma
