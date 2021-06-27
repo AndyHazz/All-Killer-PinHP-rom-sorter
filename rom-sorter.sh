@@ -17,6 +17,7 @@ ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
 BRANCH="auto-update"
 SCRIPT="rom-sorter.sh"
+UPDATESTRING="27-06-2021 - 18:36" # This will show in the first dialog title for update confirmation
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 	if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
@@ -146,7 +147,7 @@ fi
 pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
-dialog --title "Rom sorter (27-06-2021)" \
+dialog --title "Rom sorter $UPDATESTRING" \
 --yesno "Are you ready? 
 
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
