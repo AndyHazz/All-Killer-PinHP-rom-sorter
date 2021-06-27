@@ -18,9 +18,14 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then
 	#todo - figure out self updating script - referenced from https://stackoverflow.com/questions/35365799/shell-script-self-update-using-git/35365800
 	#git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
 
-	if [ !- "All-Killer-PinHP-rom-sorter" ]; then
+	if [ -f "All-Killer-PinHP-rom-sorter/.git" ]; then
+		echo "Git repo already exists"
+	else
+		echo "Cloning git repo"
 		git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
 	fi
+
+	exit 0
 
 	SCRIPT=$(readlink -f "$0")
 	SCRIPTPATH=$(dirname "$SCRIPT")
@@ -144,8 +149,7 @@ if [ -e "$VARFILE" ]; then
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
 	cd $ROMS_ADVM
 fi
-cat $VARFILE >/tmp/vartest
-echo $pi2scart_mode >/tmp/pi2scartmode
+
 #File to check for in the rom path
 FILE="_games.template"
 
