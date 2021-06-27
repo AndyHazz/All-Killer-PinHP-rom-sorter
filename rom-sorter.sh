@@ -13,6 +13,11 @@
 #Change to use the google sheet if you want very latest updates
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
+ORIGIN="https://github.com/AndyHazz/"
+REPO="All-Killer-PinHP-rom-sorter"
+BRANCH="auto-update"
+SCRIPT="rom-sorter.sh"
+UPDATESTRING="27-06-2021" # This will show in the first dialog title for update confirmation
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start ()
@@ -97,15 +102,43 @@ joy2key_stop ()
   pkill joy2key &> /dev/null
 }
 
+auto-update ()
+{
+	if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
+		if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
+			rm "/tmp/aknf-gitcheck"
+		else
+			if [ -a "$REPO/.git" ]; then
+				#echo "Git repo already exists in $(pwd)"
+				cd $REPO
+				git pull
+				cd ..
+			else
+				#echo "Cloning git repo in $(pwd)"
+				git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
+				sleep 5
+			fi
+			cp $REPO/$SCRIPT $SCRIPT
+			touch "/tmp/aknf-gitcheck"
+			bash $SCRIPT
+			exit 0
+		fi
+	fi
+}
+
 #Get current rom path from pinhp variables output - if it exists
 VARFILE="/tmp/pinhp_variables"
 if [ -e "$VARFILE" ]; then
+	RPI2JAMMA=$( grep " RPI2JAMMA=" "$VARFILE" | awk -F'"' '{print $2}' )
 	ROMS_ADVM=$( grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
 	CONFIGFILE=$( grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
+	cd $RPI2JAMMA
+	auto-update
 	cd $ROMS_ADVM
+else
+	auto-update
 fi
-
 
 #File to check for in the rom path
 FILE="_games.template"
@@ -122,7 +155,7 @@ fi
 pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
-dialog --title "Rom sorter" \
+dialog --title "Rom sorter $UPDATESTRING" \
 --yesno "Are you ready? 
 
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
