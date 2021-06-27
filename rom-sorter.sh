@@ -13,16 +13,27 @@
 #Change to use the google sheet if you want very latest updates
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
+REPO="All-Killer-PinHP-rom-sorter"
+BRANCH="main"
 
 if ping -q -c 1 -W 1 github.com >/dev/null; then
-	#todo - figure out self updating script - referenced from https://stackoverflow.com/questions/35365799/shell-script-self-update-using-git/35365800
-	#git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
 
-	if [ -f "All-Killer-PinHP-rom-sorter/.git" ]; then
-		echo "Git repo already exists"
+	if [ -f /tmp/akng-gitcheck ]; then # update has just run, get on with the script
+		echo "We're good"
+		rm "/tmp/aknf-gitcheck"
 	else
-		echo "Cloning git repo"
-		git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
+		if [ -a "$REPO/.git" ]; then
+			echo "Git repo already exists"
+			cd $REPO
+			git pull
+			cd ..
+		else
+			echo "Cloning git repo"
+			git clone https://github.com/AndyHazz/All-Killer-PinHP-rom-sorter
+
+		fi
+		cp $REPO/rom-sorter.sh rom-sorter.sh
+		touch "/tmp/aknf-gitcheck"
 	fi
 
 	exit 0
@@ -31,7 +42,6 @@ if ping -q -c 1 -W 1 github.com >/dev/null; then
 	SCRIPTPATH=$(dirname "$SCRIPT")
 	SCRIPTNAME="$0"
 	ARGS="$@"
-	BRANCH="auto-update"
 
 	self_update() {
 		cd $SCRIPTPATH
