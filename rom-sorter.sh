@@ -106,16 +106,15 @@ auto-update ()
 {
 	if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
 		if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
-			echo "We're good, update $UPDATESTRING has taken place"
 			rm "/tmp/aknf-gitcheck"
 		else
 			if [ -a "$REPO/.git" ]; then
-				echo "Git repo already exists in $(pwd)"
+				#echo "Git repo already exists in $(pwd)"
 				cd $REPO
 				git pull
 				cd ..
 			else
-				echo "Cloning git repo in $(pwd)"
+				#echo "Cloning git repo in $(pwd)"
 				git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
 				sleep 5
 			fi
@@ -134,7 +133,6 @@ if [ -e "$VARFILE" ]; then
 	ROMS_ADVM=$( grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}' )
 	CONFIGFILE=$( grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}' )
 	pi2scart_mode=$( grep " pi2scart_mode=" "$VARFILE" | awk -F'"' '{print $2}' )
-	echo $RPI2JAMMA "and" $ROMS_ADVM
 	cd $RPI2JAMMA
 	auto-update
 	cd $ROMS_ADVM
@@ -146,7 +144,7 @@ fi
 FILE="_games.template"
 
 if [ -f $FILE ]; then
-    echo "Confirmed script is acting on PinHP roms folder"
+    #echo "Confirmed script is acting on PinHP roms folder"
 else 
     echo "$FILE does not exist - failed check for PinHP rom folder."
 	echo "Aborting script to avoid disaster"
