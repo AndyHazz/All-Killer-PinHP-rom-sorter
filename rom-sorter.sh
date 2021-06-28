@@ -12,12 +12,12 @@
 
 #Change to use the google sheet if you want very latest updates
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
-TSVINPUT="https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-list.tsv"
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
+TSVINPUT="$REPO/rom-list.tsv"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
-UPDATESTRING="27-06-2021" # This will show in the first dialog title for update confirmation
+UPDATESTRING="28-06-2021" # This will show in the first dialog title for update confirmation
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start ()
