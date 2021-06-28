@@ -115,7 +115,7 @@ auto-update ()
 				cd ..
 			else
 				#echo "Cloning git repo in $(pwd)"
-				git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
+				git clone --branch $BRANCH "$ORIGIN$REPO"
 				sleep 5
 			fi
 			cp $REPO/$SCRIPT $SCRIPT
