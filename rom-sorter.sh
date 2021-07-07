@@ -14,7 +14,7 @@
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
-TSVINPUT="$REPO/rom-list.tsv"
+TSVINPUT="/$REPO/rom-list.tsv"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
 UPDATESTRING="28-06-2021" # This will show in the first dialog title for update confirmation
@@ -197,10 +197,7 @@ esac
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
   dialog --title "Rom sorter" \
-    --progressbox "Getting ready - moving everything back to main dir from any existing folders ...
-    
-    $(pwd)$TSVINPUT
-
+    --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
     " 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
