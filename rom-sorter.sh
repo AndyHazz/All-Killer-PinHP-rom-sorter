@@ -14,7 +14,7 @@
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
-TSVINPUT="/$REPO/rom-list.tsv"
+TSVINPUT="rom-list.tsv"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
 UPDATESTRING="28-06-2021" # This will show in the first dialog title for update confirmation
@@ -143,6 +143,7 @@ if [ -f $FILE ]; then
 else
   echo "$FILE does not exist - failed check for PinHP rom folder."
   echo "Aborting script to avoid disaster"
+  echo "Run the script from PinHP menu"
   sleep 2
   exit 1
 fi
@@ -201,6 +202,9 @@ find . -mindepth 2 -type f -print -exec mv {} . \; |
     " 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
+
+#get full path to TSV input
+TSVINPUT="$RPI2JAMMA/$REPO/$TSVINPUT"
 
 #=========== BIOS files ==============================================================
 
