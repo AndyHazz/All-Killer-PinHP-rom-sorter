@@ -106,11 +106,16 @@ auto-update() {
       if [ -a "$REPO/.git" ]; then
         #echo "Git repo already exists in $(pwd)"
         cd $REPO || exit
-        git pull
+        git pull |
+          dialog --title "Rom sorter" \
+            --progressbox "Pulling latest script from github" 20 30
+        sleep 5
         cd ..
       else
         #echo "Cloning git repo in $(pwd)"
-        git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
+        git clone --single-branch --branch $BRANCH "$ORIGIN$REPO" |
+          dialog --title "Rom sorter" \
+            --progressbox "Cloning latest script from github" 20 30
         sleep 5
       fi
       cp $REPO/$SCRIPT $SCRIPT
@@ -206,7 +211,6 @@ find . -mindepth 2 -type f -print -exec mv {} . \; |
 # Remove the now empty directories
 find . -type d -empty -delete
 
-
 #=========== BIOS files ==============================================================
 
 # First, move all the bios files to a hidden folder
@@ -217,7 +221,7 @@ dialog --title "Rom sorter" \
 mkdir ".BIOS"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f1)
+  bash <(curl -s -L "$TSVINPUT" | cut -f1)
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
@@ -256,7 +260,7 @@ dialog --title "Rom sorter" \
 mkdir "Beat em ups"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f2)
+  bash <(curl -s -L "$TSVINPUT" | cut -f2)
 else
   mv 64street.zip "Beat em ups" # 64th. Street - A Detective Story (World)
   mv altbeast.zip "Beat em ups" # Altered Beast (set 7, 8751 317-0078)
@@ -346,7 +350,7 @@ dialog --title "Rom sorter" \
 mkdir "Classics"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f3)
+  bash <(curl -s -L "$TSVINPUT" | cut -f3)
 else
   mv anteater.zip "Classics" # Anteater
   mv astdelux.zip "Classics" # Asteroids Deluxe (rev 2)
@@ -442,7 +446,7 @@ dialog --title "Rom sorter" \
 mkdir "Platformers"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f4)
+  bash <(curl -s -L "$TSVINPUT" | cut -f4)
 else
   mv alexkidd.zip "Platformers" # Alex Kidd: The Lost Stars (set 2, unprotected)
   mv arabian.zip "Platformers"  # Arabian
@@ -525,7 +529,7 @@ dialog --title "Rom sorter" \
 mkdir "Puzzle"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f5)
+  bash <(curl -s -L "$TSVINPUT" | cut -f5)
 else
   mv aquarush.zip "Puzzle" # Aqua Rush (AQ1/VER.A1)
   mv ar_spot.zip "Puzzle"  # Spot (Arcadia)
@@ -580,7 +584,7 @@ dialog --title "Rom sorter" \
 mkdir "Run and gun"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f6)
+  bash <(curl -s -L "$TSVINPUT" | cut -f6)
 else
   mv aliens.zip "Run and gun"   # Aliens (World set 1)
   mv aliensyn.zip "Run and gun" # Alien Syndrome (set 4, System 16B, unprotected)
@@ -653,7 +657,7 @@ dialog --title "Rom sorter" \
 mkdir "Shoot em ups"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f7)
+  bash <(curl -s -L "$TSVINPUT" | cut -f7)
 else
   mv 1942.zip "Shoot em ups"     # 1942 (set 1)
   mv 1943.zip "Shoot em ups"     # 1943: The Battle of Midway (US)
@@ -811,7 +815,7 @@ dialog --title "Rom sorter" \
 mkdir "Sports"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f8)
+  bash <(curl -s -L "$TSVINPUT" | cut -f8)
 else
   mv 2020bb.zip "Sports"   # 2020 Super Baseball (set 1)
   mv 88games.zip "Sports"  # 88 Games
@@ -890,7 +894,7 @@ dialog --title "Rom sorter" \
 mkdir "Vs Fighting"
 
 if $ONLINE; then
-  bash <(curl -s -L $TSVINPUT | cut -f9)
+  bash <(curl -s -L "$TSVINPUT" | cut -f9)
 else
   mv aof3.zip "Vs Fighting"     # Art of Fighting 3 - The Path of the Warrior / Art of Fighting - Ryuuko no Ken Gaiden
   mv bldyror2.zip "Vs Fighting" # Bloody Roar 2 (JAPAN)
