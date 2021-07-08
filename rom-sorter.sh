@@ -17,7 +17,8 @@ REPO="All-Killer-PinHP-rom-sorter"
 TSVINPUT="rom-list.tsv"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
-UPDATESTRING="28-06-2021" # This will show in the first dialog title for update confirmation
+UPDATESTRING="8 July" # This will show in the first dialog title for update confirmation
+SCRIPTNAME="Rom sorter - $UPDATESTRING"
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start() {
@@ -107,14 +108,14 @@ auto-update() {
         #echo "Git repo already exists in $(pwd)"
         cd $REPO || exit
         git pull |
-          dialog --title "Rom sorter" \
+          dialog --title "$SCRIPTNAME" \
             --progressbox "Pulling latest script from github" 20 30
         sleep 5
         cd ..
       else
         #echo "Cloning git repo in $(pwd)"
         git clone --single-branch --branch $BRANCH "$ORIGIN$REPO" |
-          dialog --title "Rom sorter" \
+          dialog --title "$SCRIPTNAME" \
             --progressbox "Cloning latest script from github" 20 30
         sleep 5
       fi
@@ -144,7 +145,8 @@ fi
 FILE="_games.template"
 
 if [ -f $FILE ]; then
-  echo "Confirmed script is acting on PinHP roms folder"
+  dialog --title "$SCRIPTNAME" \
+    --infobox "Confirmed script is acting on PinHP roms folder" 7 30
 else
   echo "$FILE does not exist - failed check for PinHP rom folder."
   echo "Aborting script to avoid disaster"
@@ -156,7 +158,7 @@ fi
 pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
-dialog --title "Rom sorter $UPDATESTRING" \
+dialog --title "$SCRIPTNAME" \
   --yesno "Are you ready?
 
 This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.
@@ -177,7 +179,7 @@ case $response in
 esac
 
 joy2key_start "yesno"
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --yesno "Get latest and best game recommendations list from github?
 Answer 'no' to use offline" 11 30
 response=$?
@@ -205,7 +207,7 @@ TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
-  dialog --title "Rom sorter" \
+  dialog --title "$SCRIPTNAME" \
     --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
     " 20 30
 # Remove the now empty directories
@@ -215,7 +217,7 @@ find . -type d -empty -delete
 
 # First, move all the bios files to a hidden folder
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Moving BIOS files aside ..." 7 30
 
 mkdir ".BIOS"
@@ -254,7 +256,7 @@ fi
 
 #=========== Beat em ups ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best beat em ups ..." 7 30
 
 mkdir "Beat em ups"
@@ -344,7 +346,7 @@ fi
 
 #=========== Classics ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the classics ..." 7 30
 
 mkdir "Classics"
@@ -440,7 +442,7 @@ fi
 
 #=========== Platformers ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best platformers ..." 7 30
 
 mkdir "Platformers"
@@ -523,7 +525,7 @@ fi
 
 #=========== Puzzle ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best puzzle games ..." 7 30
 
 mkdir "Puzzle"
@@ -578,7 +580,7 @@ fi
 
 #=========== Run and gun ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best Run and gun games ..." 7 30
 
 mkdir "Run and gun"
@@ -651,7 +653,7 @@ fi
 
 #=========== Shoot em ups ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best shoot em ups ..." 7 30
 
 mkdir "Shoot em ups"
@@ -809,7 +811,7 @@ fi
 
 #=========== Sports ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best sports games ..." 7 30
 
 mkdir "Sports"
@@ -888,7 +890,7 @@ fi
 
 #=========== Vs Fighting ==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Finding the best Vs fighting games ..." 7 30
 
 mkdir "Vs Fighting"
@@ -964,7 +966,7 @@ fi
 
 #===========Everything else==============================================================
 
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --infobox "Moving everything else to a hidden [Leftovers] folder ..." 7 30
 
 mkdir "[Leftovers]"
@@ -977,7 +979,7 @@ sed -i -e 's/custom_folders=./custom_folders=Y/' "$CONFIGFILE"
 echo "pikeyd_current=" >>/tmp/external_vars #Clear variable to not confuse parent script
 
 joy2key_start "yesno"
-dialog --title "Rom sorter" \
+dialog --title "$SCRIPTNAME" \
   --msgbox "All done! " 7 30
 joy2key_stop
 
