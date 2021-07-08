@@ -196,13 +196,12 @@ case $response in
 esac
 
 #get full path to TSV input
-TSVINPUT="$RPI2JAMMA/$REPO/$TSVINPUT"
+TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
   dialog --title "Rom sorter" \
     --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
-    $TSVINPUT
     " 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
