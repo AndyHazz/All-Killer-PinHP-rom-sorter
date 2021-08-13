@@ -177,8 +177,7 @@ esac
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --yesno "Exclude games known to run slow on Pi 3b+?
-  Answer 'No' to include a few more games that may be ok on Pi 4" 11 30
+  --yesno "Hide games known to run slow on Pi 3b+?" 11 30
 response=$?
 joy2key_stop
 case $response in
@@ -212,7 +211,7 @@ mkdir ".BIOS"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'.BIOS'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'.BIOS'")
   else
     bash <(grep "'.BIOS'" "$ROMLIST")
   fi
@@ -255,7 +254,7 @@ mkdir "Beat em ups"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Beat em ups'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Beat em ups'")
   else
     bash <(grep "'Beat em ups'" "$ROMLIST")
   fi
@@ -349,7 +348,7 @@ mkdir "Classics"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Classics'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Classics'")
   else
     bash <(grep "'Classics'" "$ROMLIST")
   fi
@@ -449,7 +448,7 @@ mkdir "Platformers"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Platformers'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Platformers'")
   else
     bash <(grep "'Platformers'" "$ROMLIST")
   fi
@@ -536,7 +535,7 @@ mkdir "Puzzle"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Puzzle'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Puzzle'")
   else
     bash <(grep "'Puzzle'" "$ROMLIST")
   fi
@@ -595,7 +594,7 @@ mkdir "Run and gun"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Run and gun'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Run and gun'")
   else
     bash <(grep "'Run and gun'" "$ROMLIST")
   fi
@@ -672,7 +671,7 @@ mkdir "Shoot em ups"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Shoot em ups'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Shoot em ups'")
   else
     bash <(grep "'Shoot em ups'" "$ROMLIST")
   fi
@@ -834,7 +833,7 @@ mkdir "Sports"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Sports'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Sports'")
   else
     bash <(grep "'Sports'" "$ROMLIST")
   fi
@@ -917,7 +916,7 @@ mkdir "Vs Fighting"
 
 if $ONLINE; then
   if $EXCLUDE_SLOW; then
-    bash <(grep -v "\[slow\]" "$ROMLIST" | grep "'Vs Fighting'")
+    bash <(grep -v "\[Slow\]" "$ROMLIST" | grep "'Vs Fighting'")
   else
     bash <(grep "'Vs Fighting'" "$ROMLIST")
   fi
