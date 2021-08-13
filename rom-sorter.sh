@@ -18,7 +18,7 @@ TSVINPUT="rom-list.tsv"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
 UPDATESTRING="8 July" # This will show in the first dialog title for update confirmation
-$SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
+SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start() {
@@ -223,7 +223,8 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir ".BIOS"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f1)
+  #bash <(curl -s -L "$TSVINPUT" | cut -f1)
+  source <(grep -v ".BIOS" rom-list.sh)
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
