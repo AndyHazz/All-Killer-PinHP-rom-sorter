@@ -226,7 +226,7 @@ mkdir ".BIOS"
 
 if $ONLINE; then
   #bash <(curl -s -L "$TSVINPUT" | cut -f1)
-  source <(grep -v ".BIOS" $ROMLIST)
+  source <(grep ".BIOS" $ROMLIST)
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
