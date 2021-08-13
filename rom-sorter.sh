@@ -14,7 +14,6 @@
 #TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
-TSVINPUT="rom-list.tsv"
 ROMLIST="rom-list.sh"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
@@ -200,7 +199,6 @@ case $response in
 esac
 
 #get full path to rom list
-TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
 ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST"
 
 # Move everything back into the root roms dir so we can start from scratch
