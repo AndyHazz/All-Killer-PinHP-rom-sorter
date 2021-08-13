@@ -108,16 +108,12 @@ auto-update() {
       if [ -a "$REPO/.git" ]; then
         #echo "Git repo already exists in $(pwd)"
         cd $REPO || exit
-        git pull |
-          dialog --title "$SCRIPT_TITLE" \
-            --progressbox "Pulling latest script from github" 20 30
+        git pull
         sleep 5
         cd ..
       else
         #echo "Cloning git repo in $(pwd)"
-        git clone --single-branch --branch $BRANCH "$ORIGIN$REPO" |
-          dialog --title "$SCRIPT_TITLE" \
-            --progressbox "Cloning latest script from github" 20 30
+        git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
         sleep 5
       fi
       cp $REPO/$SCRIPT $SCRIPT
@@ -205,11 +201,11 @@ esac
 
 #get full path to rom list
 TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
-ROMLIST="/$RPI2JAMMA/$REPO/$ROMLIST"
+ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
-  dialog --title "$ROMLIST" \
+  dialog --title "$SCRIPT_TITLE" \
     --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
     " 20 30
 # Remove the now empty directories
@@ -225,8 +221,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir ".BIOS"
 
 if $ONLINE; then
-  #bash <(curl -s -L "$TSVINPUT" | cut -f1)
-  bash <(grep ".BIOS" $ROMLIST)
+  bash <(grep "'.BIOS'" "$ROMLIST")
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
@@ -265,7 +260,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Beat em ups"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f2)
+  bash <(grep "'Beat em ups'" "$ROMLIST")
 else
   mv 64street.zip "Beat em ups" # 64th. Street - A Detective Story (World)
   mv altbeast.zip "Beat em ups" # Altered Beast (set 7, 8751 317-0078)
@@ -355,7 +350,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Classics"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f3)
+  bash <(grep "'Classics'" "$ROMLIST")
 else
   mv anteater.zip "Classics" # Anteater
   mv astdelux.zip "Classics" # Asteroids Deluxe (rev 2)
@@ -451,7 +446,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Platformers"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f4)
+  bash <(grep "'Platformers'" "$ROMLIST")
 else
   mv alexkidd.zip "Platformers" # Alex Kidd: The Lost Stars (set 2, unprotected)
   mv arabian.zip "Platformers"  # Arabian
@@ -534,7 +529,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Puzzle"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f5)
+  bash <(grep "'Puzzle'" "$ROMLIST")
 else
   mv aquarush.zip "Puzzle" # Aqua Rush (AQ1/VER.A1)
   mv ar_spot.zip "Puzzle"  # Spot (Arcadia)
@@ -589,7 +584,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Run and gun"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f6)
+  bash <(grep "'Run and gun'" "$ROMLIST")
 else
   mv aliens.zip "Run and gun"   # Aliens (World set 1)
   mv aliensyn.zip "Run and gun" # Alien Syndrome (set 4, System 16B, unprotected)
@@ -662,7 +657,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Shoot em ups"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f7)
+  bash <(grep "'Shoot em ups'" "$ROMLIST")
 else
   mv 1942.zip "Shoot em ups"     # 1942 (set 1)
   mv 1943.zip "Shoot em ups"     # 1943: The Battle of Midway (US)
@@ -820,7 +815,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Sports"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f8)
+  bash <(grep "'Sports'" "$ROMLIST")
 else
   mv 2020bb.zip "Sports"   # 2020 Super Baseball (set 1)
   mv 88games.zip "Sports"  # 88 Games
@@ -899,7 +894,7 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Vs Fighting"
 
 if $ONLINE; then
-  bash <(curl -s -L "$TSVINPUT" | cut -f9)
+  bash <(grep "'Vs Fighting'" "$ROMLIST")
 else
   mv aof3.zip "Vs Fighting"     # Art of Fighting 3 - The Path of the Warrior / Art of Fighting - Ryuuko no Ken Gaiden
   mv bldyror2.zip "Vs Fighting" # Bloody Roar 2 (JAPAN)
