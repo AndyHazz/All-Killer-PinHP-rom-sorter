@@ -15,9 +15,10 @@
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
 TSVINPUT="rom-list.tsv"
+ROMLIST="rom-list.sh"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
-UPDATESTRING="8 July" # This will show in the first dialog title for update confirmation
+UPDATESTRING="13 Aug" # This will show in the first dialog title for update confirmation
 SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
 
 #Enable Jamma controls, if system is running on Pi2Jamma
@@ -202,8 +203,9 @@ case $response in
   ;;
 esac
 
-#get full path to TSV input
+#get full path to rom list
 TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
+ROMLIST="file://$RPI2JAMMA/$REPO/$ROMLIST"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
@@ -224,7 +226,7 @@ mkdir ".BIOS"
 
 if $ONLINE; then
   #bash <(curl -s -L "$TSVINPUT" | cut -f1)
-  source <(grep -v ".BIOS" rom-list.sh)
+  source <(grep -v ".BIOS" $ROMLIST)
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
