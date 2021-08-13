@@ -10,11 +10,9 @@
 # WARNING - this will remove any custom folders you had set up before running this script!!!
 ##############################################################################################
 
-#Change to use the google sheet if you want very latest updates
-#TSVINPUT="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=210123609&single=true&output=tsv"
 ORIGIN="https://github.com/AndyHazz/"
 REPO="All-Killer-PinHP-rom-sorter"
-ROMLIST="rom-list.sh"
+ROMLIST_FILENAME="rom-list.sh"
 BRANCH="main"
 SCRIPT="rom-sorter.sh"
 UPDATESTRING="13 Aug" # This will show in the first dialog title for update confirmation
@@ -101,6 +99,7 @@ joy2key_stop() {
 
 auto-update() {
   if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
+    ONLINE=true
     if [ -a "/tmp/aknf-gitcheck" ]; then           # update has just taken place, get on with the script
       rm "/tmp/aknf-gitcheck"
     else
@@ -120,6 +119,8 @@ auto-update() {
       bash $SCRIPT
       exit 0
     fi
+  else
+    ONLINE=false
   fi
 }
 
@@ -176,22 +177,13 @@ esac
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --yesno "Get latest and best game recommendations list from github?
-Answer 'no' to use offline" 11 30
+  --yesno "Exclude games known to run slow on Pi 3b+?
+  Answer 'No' to include a few more games that may be ok on Pi 4" 11 30
 response=$?
 joy2key_stop
 case $response in
-0)
-  if ping -q -c 1 -W 1 google.com >/dev/null; then
-    #echo "The network is up"
-    ONLINE=true
-  else
-    clear
-    echo "The network is down"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-  fi
-  ;;
-1) ONLINE=false ;;
+0) EXCLUDE_SLOW=true ;;
+1) EXCLUDE_SLOW=false ;;
 255)
   clear
   [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -199,7 +191,7 @@ case $response in
 esac
 
 #get full path to rom list
-ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST"
+ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
@@ -219,7 +211,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir ".BIOS"
 
 if $ONLINE; then
-  bash <(grep "'.BIOS'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'.BIOS'")
+  else
+    bash <(grep "'.BIOS'" "$ROMLIST")
+  fi
 else
   mv acpsx.zip ".BIOS"    # Acclaim PSX
   mv ar_bios.zip ".BIOS"  # Arcadia System BIOS
@@ -258,7 +254,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Beat em ups"
 
 if $ONLINE; then
-  bash <(grep "'Beat em ups'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Beat em ups'")
+  else
+    bash <(grep "'Beat em ups'" "$ROMLIST")
+  fi
 else
   mv 64street.zip "Beat em ups" # 64th. Street - A Detective Story (World)
   mv altbeast.zip "Beat em ups" # Altered Beast (set 7, 8751 317-0078)
@@ -348,7 +348,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Classics"
 
 if $ONLINE; then
-  bash <(grep "'Classics'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Classics'")
+  else
+    bash <(grep "'Classics'" "$ROMLIST")
+  fi
 else
   mv anteater.zip "Classics" # Anteater
   mv astdelux.zip "Classics" # Asteroids Deluxe (rev 2)
@@ -444,7 +448,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Platformers"
 
 if $ONLINE; then
-  bash <(grep "'Platformers'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Platformers'")
+  else
+    bash <(grep "'Platformers'" "$ROMLIST")
+  fi
 else
   mv alexkidd.zip "Platformers" # Alex Kidd: The Lost Stars (set 2, unprotected)
   mv arabian.zip "Platformers"  # Arabian
@@ -527,7 +535,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Puzzle"
 
 if $ONLINE; then
-  bash <(grep "'Puzzle'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Puzzle'")
+  else
+    bash <(grep "'Puzzle'" "$ROMLIST")
+  fi
 else
   mv aquarush.zip "Puzzle" # Aqua Rush (AQ1/VER.A1)
   mv ar_spot.zip "Puzzle"  # Spot (Arcadia)
@@ -582,7 +594,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Run and gun"
 
 if $ONLINE; then
-  bash <(grep "'Run and gun'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Run and gun'")
+  else
+    bash <(grep "'Run and gun'" "$ROMLIST")
+  fi
 else
   mv aliens.zip "Run and gun"   # Aliens (World set 1)
   mv aliensyn.zip "Run and gun" # Alien Syndrome (set 4, System 16B, unprotected)
@@ -655,7 +671,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Shoot em ups"
 
 if $ONLINE; then
-  bash <(grep "'Shoot em ups'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Shoot em ups'")
+  else
+    bash <(grep "'Shoot em ups'" "$ROMLIST")
+  fi
 else
   mv 1942.zip "Shoot em ups"     # 1942 (set 1)
   mv 1943.zip "Shoot em ups"     # 1943: The Battle of Midway (US)
@@ -813,7 +833,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Sports"
 
 if $ONLINE; then
-  bash <(grep "'Sports'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Sports'")
+  else
+    bash <(grep "'Sports'" "$ROMLIST")
+  fi
 else
   mv 2020bb.zip "Sports"   # 2020 Super Baseball (set 1)
   mv 88games.zip "Sports"  # 88 Games
@@ -892,7 +916,11 @@ dialog --title "$SCRIPT_TITLE" \
 mkdir "Vs Fighting"
 
 if $ONLINE; then
-  bash <(grep "'Vs Fighting'" "$ROMLIST")
+  if $EXCLUDE_SLOW; then
+    bash <(grep -v "[slow]" "$ROMLIST" | grep "'Vs Fighting'")
+  else
+    bash <(grep "'Vs Fighting'" "$ROMLIST")
+  fi
 else
   mv aof3.zip "Vs Fighting"     # Art of Fighting 3 - The Path of the Warrior / Art of Fighting - Ryuuko no Ken Gaiden
   mv bldyror2.zip "Vs Fighting" # Bloody Roar 2 (JAPAN)
