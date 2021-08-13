@@ -205,11 +205,11 @@ esac
 
 #get full path to rom list
 TSVINPUT="file://$RPI2JAMMA/$REPO/$TSVINPUT"
-ROMLIST="file://$RPI2JAMMA/$REPO/$ROMLIST"
+ROMLIST="/$RPI2JAMMA/$REPO/$ROMLIST"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
-  dialog --title "$SCRIPT_TITLE" \
+  dialog --title "$ROMLIST" \
     --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
     " 20 30
 # Remove the now empty directories
