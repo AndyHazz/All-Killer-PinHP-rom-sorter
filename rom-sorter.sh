@@ -204,7 +204,7 @@ find . -type d -empty -delete
 moveroms () {
   mkdir "$1"
   if $ONLINE; then # Download latest from Google sheet
-    bash <(curl -s -L "$GOOGLE_SHEET" grep -v "$EXCLUDE" | grep "'$1'")
+    bash <(curl -s -L "$GOOGLE_SHEET" grep -v "$EXCLUDE" | grep "'$1'") >/dev/null
   else # Use rom list from git repo
     bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
   fi
