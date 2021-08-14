@@ -101,17 +101,15 @@ joy2key_stop() {
 auto-update() {
   if ping -q -c 1 -W 1 github.com >/dev/null; then # we're online
     ONLINE=true
-    if [ -a "/tmp/aknf-gitcheck" ]; then           # update has just taken place, get on with the script
+    if [ -a "/tmp/aknf-gitcheck" ]; then # update has just taken place, get on with the script
       rm "/tmp/aknf-gitcheck"
-    else
-      if [ -a "$REPO/.git" ]; then
-        #echo "Git repo already exists in $(pwd)"
+    else                           # check for any git updates
+      if [ -a "$REPO/.git" ]; then # git repo already exists
         cd $REPO || exit
         git pull
         sleep 5
         cd ..
-      else
-        #echo "Cloning git repo in $(pwd)"
+      else # clone git repo
         git clone --single-branch --branch $BRANCH "$ORIGIN$REPO"
         sleep 5
       fi
@@ -120,14 +118,14 @@ auto-update() {
       bash $SCRIPT
       exit 0
     fi
-  else
+  else # couldn't reach github.com
     ONLINE=false
   fi
 }
 
 #Get current rom path from pinhp variables output - if it exists
 VARFILE="/tmp/pinhp_variables"
-if [ -e "$VARFILE" ]; then
+if [ -e "$VARFILE" ]; then # variables file exists
   RPI2JAMMA=$(grep " RPI2JAMMA=" "$VARFILE" | awk -F'"' '{print $2}')
   ROMS_ADVM=$(grep " ROMS_ADVM=" "$VARFILE" | awk -F'"' '{print $2}')
   CONFIGFILE=$(grep " CONFIGFILE=" "$VARFILE" | awk -F'"' '{print $2}')
@@ -178,12 +176,13 @@ esac
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --yesno "Hide games known to run slow on Pi 3b+?" 11 30
+  --yesno "
+  Hide games known to run slow on Pi 3b+?" 11 30
 response=$?
 joy2key_stop
 case $response in
-0) EXCLUDE="\[null\]" ;;
-1) EXCLUDE="\[Slow\]" ;;
+0) EXCLUDE="\[Slow\]" ;;
+1) EXCLUDE="\[nothing\]" ;;
 255)
   clear
   [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -196,12 +195,12 @@ ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
   dialog --title "$SCRIPT_TITLE" \
-    --progressbox "Getting ready - moving everything back to main dir from any existing folders ..
+    --progressbox "Getting ready ... moving everything back to main dir from any existing folders.
     " 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
 
-moveroms () {
+moveroms() {
   mkdir "$1"
   if $ONLINE; then # Download latest from Google sheet
     bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
@@ -215,83 +214,93 @@ moveroms () {
 # First, move all the bios files to a hidden folder
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Moving BIOS files aside ..." 7 30
+  --infobox "
+  Moving BIOS files aside ..." 7 30
 
 moveroms ".BIOS"
 
 #=========== Beat em ups ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best beat em ups ..." 7 30
+  --infobox "
+  Finding the best beat em ups ..." 7 30
 
 moveroms "Beat em ups"
 
 #=========== Classics ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the classics ..." 7 30
+  --infobox "
+  Finding the classics ..." 7 30
 
 moveroms "Classics"
 
 #=========== Platformers ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best platformers ..." 7 30
+  --infobox "
+  Finding the best platformers ..." 7 30
 
 moveroms "Platformers"
 
 #=========== Puzzle ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best puzzle games ..." 7 30
+  --infobox "
+  Finding the best puzzle games ..." 7 30
 
 moveroms "Puzzle"
 
 #=========== Run and gun ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best Run and gun games ..." 7 30
+  --infobox "
+  Finding the best Run and gun games ..." 7 30
 
 moveroms "Run and gun"
 
 #=========== Shoot em ups ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best shoot em ups ..." 7 30
+  --infobox "
+  Finding the best shoot em ups ..." 7 30
 
 moveroms "Shoot em ups"
 
 #=========== Sports ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best sports games ..." 7 30
+  --infobox "
+  Finding the best sports games ..." 7 30
 
 moveroms "Sports"
 
 #=========== Vs Fighting ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Finding the best Vs fighting games ..." 7 30
+  --infobox "
+  Finding the best Vs fighting games ..." 7 30
 
 moveroms "Vs Fighting"
 
 #===========Everything else==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "Moving everything else to a hidden [Leftovers] folder ..." 7 30
+  --infobox "
+  Moving everything else to a hidden [Leftovers] folder ..." 7 30
 
 mkdir "[Leftovers]"
 echo "#Hidden-folder" >\[Leftovers\]/.title #Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
 #cp .BIOS/*.zip	"[Leftovers]"
 mv ./*.zip "[Leftovers]"
-rm .title                                   # Delete unwanted .title folder from root of roms dir
+rm .title                                   # Delete unwanted .title file from root of roms dir
 echo "custom_folders=Y" >/tmp/external_vars #Turn PinHP custom folders option
 sed -i -e 's/custom_folders=./custom_folders=Y/' "$CONFIGFILE"
 echo "pikeyd_current=" >>/tmp/external_vars #Clear variable to not confuse parent script
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --msgbox "All done! " 7 30
+  --msgbox "
+  All done!" 7 30
 joy2key_stop
-
 clear
