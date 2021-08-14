@@ -182,8 +182,8 @@ dialog --title "$SCRIPT_TITLE" \
 response=$?
 joy2key_stop
 case $response in
-0) EXCLUDE="\[Slow\]" ;;
-1) EXCLUDE="\[null\]" ;;
+0) EXCLUDE="\[null\]" ;;
+1) EXCLUDE="\[Slow\]" ;;
 255)
   clear
   [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -204,7 +204,7 @@ find . -type d -empty -delete
 moveroms () {
   mkdir "$1"
   if $ONLINE; then # Download latest from Google sheet
-    bash <(curl -s -L "$GOOGLE_SHEET" grep -v "$EXCLUDE" | grep "'$1'") >/dev/null
+    bash <(curl -s -L "$GOOGLE_SHEET" grep -v "$EXCLUDE" | grep "'$1'") &> /dev/null
   else # Use rom list from git repo
     bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
   fi
