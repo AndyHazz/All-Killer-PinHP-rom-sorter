@@ -208,8 +208,7 @@ moveroms() {
 # First, move all the bios files to a hidden folder
 
 dialog --title "$SCRIPT_TITLE" \
---infobox "
-  Moving BIOS files aside ..." 7 30
+--infobox "\nMoving BIOS files aside ..." 7 30
 
 moveroms ".BIOS"
 
@@ -223,16 +222,14 @@ moveroms "Beat em ups"
 #=========== Classics ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
---infobox "
-  Finding the classics ..." 7 30
+--infobox "\nFinding the classics ..." 7 30
 
 moveroms "Classics"
 
 #=========== Platformers ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
---infobox "
-  Finding the best platformers ..." 7 30
+--infobox "\nFinding the best platformers ..." 7 30
 
 moveroms "Platformers"
 
@@ -287,7 +284,6 @@ echo "pikeyd_current=" >>/tmp/external_vars #Clear variable to not confuse paren
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
---msgbox "
-  All done!" 7 30
+--msgbox "\nAll done!" 7 30
 joy2key_stop
 clear
