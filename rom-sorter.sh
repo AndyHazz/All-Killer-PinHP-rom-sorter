@@ -154,8 +154,8 @@ fi
 pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
-dialog --trim --title "$SCRIPT_TITLE" \
-  --yesno "Are you ready?\n\n
+dialog --title "$SCRIPT_TITLE" \
+  --yesno --trim "Are you ready?\n\n
   This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.\n
   Any existing rom folders will be replaced/updated." 15 30
 response=$?
