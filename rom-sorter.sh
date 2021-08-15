@@ -142,7 +142,7 @@ FILE="_games.template"
 
 if [ -f $FILE ]; then
   dialog --title "$SCRIPT_TITLE" \
-    --infobox "Confirmed script is acting on PinHP roms folder" 7 30
+  --infobox "Confirmed script is acting on PinHP roms folder" 7 30
 else
   echo "$FILE does not exist - failed check for PinHP rom folder."
   echo "Aborting script to avoid disaster"
@@ -155,9 +155,7 @@ pikeyd165_start "yesno" "0.5"
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --yesno --trim "Are you ready?\n\n
-  This script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.\n
-  Any existing rom folders will be replaced/updated." 15 30
+--yesno "Are you ready?\n\nThis script will use all killer no filler lists to select best games for each genre and move them into folders for PinHP.\nAny existing rom folders will be replaced/updated." 15 30
 response=$?
 joy2key_stop
 case $response in
@@ -174,8 +172,7 @@ esac
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --yesno "\n
-  Hide games known to run slow on Pi 3b+?" 11 30
+--yesno "\nHide games known to run slow on Pi 3b+?" 11 30
 response=$?
 joy2key_stop
 case $response in
@@ -193,8 +190,7 @@ ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
   dialog --title "$SCRIPT_TITLE" \
-    --progressbox "Getting ready ... moving everything back to main dir from any existing folders.
-    " 20 30
+--progressbox "Getting ready ... moving everything back to main dir from any existing folders." 20 30
 # Remove the now empty directories
 find . -type d -empty -delete
 
@@ -212,7 +208,7 @@ moveroms() {
 # First, move all the bios files to a hidden folder
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
+--infobox "
   Moving BIOS files aside ..." 7 30
 
 moveroms ".BIOS"
@@ -220,15 +216,14 @@ moveroms ".BIOS"
 #=========== Beat em ups ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best beat em ups ..." 7 30
+--infobox "\nFinding the best beat em ups ..." 7 30
 
 moveroms "Beat em ups"
 
 #=========== Classics ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
+--infobox "
   Finding the classics ..." 7 30
 
 moveroms "Classics"
@@ -236,7 +231,7 @@ moveroms "Classics"
 #=========== Platformers ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
+--infobox "
   Finding the best platformers ..." 7 30
 
 moveroms "Platformers"
@@ -244,48 +239,42 @@ moveroms "Platformers"
 #=========== Puzzle ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best puzzle games ..." 7 30
+--infobox "\nFinding the best puzzle games ..." 7 30
 
 moveroms "Puzzle"
 
 #=========== Run and gun ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best Run and gun games ..." 7 30
+--infobox "\nFinding the best Run and gun games ..." 7 30
 
 moveroms "Run and gun"
 
 #=========== Shoot em ups ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best shoot em ups ..." 7 30
+--infobox "\nFinding the best shoot em ups ..." 7 30
 
 moveroms "Shoot em ups"
 
 #=========== Sports ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best sports games ..." 7 30
+--infobox "\nFinding the best sports games ..." 7 30
 
 moveroms "Sports"
 
 #=========== Vs Fighting ==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Finding the best Vs fighting games ..." 7 30
+--infobox "\nFinding the best Vs fighting games ..." 7 30
 
 moveroms "Vs Fighting"
 
 #===========Everything else==============================================================
 
 dialog --title "$SCRIPT_TITLE" \
-  --infobox "
-  Moving everything else to a hidden [Leftovers] folder ..." 7 30
+--infobox "\nMoving everything else to a hidden [Leftovers] folder ..." 7 30
 
 mkdir "[Leftovers]"
 echo "#Hidden-folder" >\[Leftovers\]/.title #Write a hidden file to the lefotvers dir, which will make it appear invisible but still accessible in the menu
@@ -298,7 +287,7 @@ echo "pikeyd_current=" >>/tmp/external_vars #Clear variable to not confuse paren
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
-  --msgbox "
+--msgbox "
   All done!" 7 30
 joy2key_stop
 clear
