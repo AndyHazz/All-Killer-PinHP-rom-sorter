@@ -175,8 +175,9 @@ case $response in
 esac
 
 joy2key_start "yesno"
-dialog --title "$SCRIPT_TITLE" \
-  --yesno "\nHide games known to run slow on Pi 3b+?" 11 30
+dialog --trim --title "$SCRIPT_TITLE" \
+  --yesno "
+  Hide games known to run slow on Pi 3b+?" 11 30
 response=$?
 joy2key_stop
 case $response in
