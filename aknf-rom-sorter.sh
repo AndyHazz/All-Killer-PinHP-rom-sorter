@@ -15,8 +15,8 @@ REPO="All-Killer-PinHP-rom-sorter"
 GOOGLE_SHEET="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CIBJMZm0bhofF7o-bJWep1oufGW4kxuCwsq2JADA2h1xWryyRpDfNj3zI9ysyiL/pub?gid=1837762843&single=true&output=tsv"
 ROMLIST_FILENAME="rom-list.sh"
 BRANCH="main"
-SCRIPT="rom-sorter.sh"
-UPDATESTRING="14 Aug" # This will show in the first dialog title for update confirmation
+SCRIPT="aknf-rom-sorter.sh"
+UPDATESTRING="v2.0-alpha1" # This will show in the first dialog title for update confirmation
 SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
 
 #Enable Jamma controls, if system is running on Pi2Jamma
@@ -184,6 +184,20 @@ case $response in
   ;;
 esac
 
+joy2key_start "yesno"
+dialog --title "$SCRIPT_TITLE" \
+--yesno "\nUse rom list downloaded from github? This is updated less frequently but will be stable. Choose 'No' to use the google sheet directly https://bit.ly/3k3dh9U (active internet connection required)." 11 30
+response=$?
+joy2key_stop
+case $response in
+0) SOURCE="Git" ;;
+1) SOURCE="Google" ;;
+255)
+  clear
+  [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+  ;;
+esac
+
 #get full path to rom list
 ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 
@@ -196,7 +210,7 @@ find . -type d -empty -delete
 
 moveroms() {
   mkdir "$1"
-  if $ONLINE; then # Download latest from Google sheet
+  if [$ONLINE] && [$SOURCE = "Google"]; then # Download latest from Google sheet
     bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
   else # Use rom list from git repo
     bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
