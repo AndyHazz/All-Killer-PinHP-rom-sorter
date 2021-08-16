@@ -7,6 +7,7 @@ Put the [rom-sorter.sh](https://raw.githubusercontent.com/AndyHazz/All-Killer-Pi
 Run the script from PinHP's menu (Options > System Settings Menu > System Settings > Run External File).
 
 ## Online updates
+
 Each time you run it (with an active internet connection), the script will update itself, and can also get the latest recommended game list.
 
 ## Genres
@@ -25,6 +26,7 @@ Best games from each genre will be moved into their own subfolders:
 Everything else will be put in a hidden '[Leftovers]' folder, which you can still access by selectring the extra blank line below the visible folders.
 
 ## Use the correct rom set
+
 The included rom lists are specifically for AdvanceMame (0.106). Other rom sets may have different zip filenames and the results won't be as good for you.
 Partial romsets will work, but you might not get as many games moved into the genre folders.
 The script will output (harmless) error messages for any rom zips it can't find.
