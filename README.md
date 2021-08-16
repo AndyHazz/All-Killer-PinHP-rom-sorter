@@ -2,7 +2,7 @@
 
 This script will organise your games into genre folders, choosing only the best quality games for each genre (original list based on work by members of the arcadecontrols.com forum here: http://forum.arcadecontrols.com/index.php/topic,149708.0.html).
 
-Put the [rom-sorter.sh](https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/rom-sorter.sh) script in the root of your PinHP 'rpi2jamma' folder, along with a full **Non-Merged** Mame 0.106 romset in your 'roms_advmame' folder.
+Put the [aknf-rom-sorter.sh](https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/aknf-rom-sorter.sh) script in the root of your PinHP 'rpi2jamma' folder, along with a full **Non-Merged** Mame 0.106 romset in your 'roms_advmame' folder.
 
 Run the script from PinHP's menu (Options > System Settings Menu > System Settings > Run External File).
 
