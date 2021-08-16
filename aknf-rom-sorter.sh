@@ -186,7 +186,7 @@ esac
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
---yesno "\nUse rom list already downloaded from github? This is updated less frequently but will be stable. Choose 'No' to use the google sheet directly https://bit.ly/3k3dh9U (active internet connection required)." 13 30
+--yesno "\nUse rom list already downloaded from github? This is updated less frequently but will be stable. Choose 'No' to use the google sheet directly https://bit.ly/3k3dh9U (active internet connection required)." 15 30
 response=$?
 joy2key_stop
 case $response in
