@@ -16,7 +16,7 @@ GOOGLE_SHEET="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CI
 ROMLIST_FILENAME="rom-list.sh"
 BRANCH="main"
 SCRIPT="aknf-rom-sorter.sh"
-UPDATESTRING="v2.0-alpha1" # This will show in the first dialog title for update confirmation
+UPDATESTRING="v2.0" # This will show in the first dialog title for update confirmation
 SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
 
 #Enable Jamma controls, if system is running on Pi2Jamma
