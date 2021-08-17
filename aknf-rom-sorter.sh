@@ -210,10 +210,20 @@ find . -type d -empty -delete
 
 moveroms() {
   mkdir "$1"
-  if [ $ONLINE ] && [ $SOURCE = "Google" ]; then # Download latest from Google sheet
-    bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
+  if [ "$ONLINE" ] && [ "$SOURCE" = "Google" ]; then # Download latest from Google sheet
+    joy2key_start "yesno"
+    dialog --title "$ONLINE - $SOURCE" \
+      --msgbox "\nUsing google sheet" 7 30
+    joy2key_stop
+    exit 1
+    # bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
   else # Use rom list from git repo
-    bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
+    joy2key_start "yesno"
+    dialog --title "$ONLINE - $SOURCE" \
+      --msgbox "\nUsing git list" 7 30
+    joy2key_stop
+    exit 1
+    # bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
   fi
 }
 
