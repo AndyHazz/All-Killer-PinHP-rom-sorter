@@ -210,7 +210,7 @@ find . -type d -empty -delete
 
 moveroms() {
   mkdir "$1"
-  if [ "$ONLINE" ] && [ "$SOURCE" = "Google" ]; then # Download latest from Google sheet
+  if [[ "$ONLINE" && "$SOURCE" = "Google" ]]; then # Download latest from Google sheet
     joy2key_start "yesno"
     dialog --title "$ONLINE - $SOURCE" \
       --msgbox "\nUsing google sheet" 7 30
