@@ -1,6 +1,6 @@
 # All Killer, No Filler PinHP rom sorter
 
-This script will organise your games into genre folders, choosing only the best quality games for each genre (original list based on work by members of the arcadecontrols.com forum here: http://forum.arcadecontrols.com/index.php/topic,149708.0.html).
+This script will organise your games into genre folders, choosing only the best quality games for each genre. Original list based on work by members of the arcadecontrols.com forum here: http://forum.arcadecontrols.com/index.php/topic,149708.0.html. Expanded with some 'best games' from here: http://adb.arcadeitalia.net/?search=mame&emulator_to=318&bestgame=29151&control_type=17%3B2%3B5 and here: https://www.reddit.com/r/MAME/comments/2rawpr/i_compiled_several_best_ofrecommended_arcade/, plus some personal preference ;) I'm gradually removing or marking as slow any games that don't work on Raspberry Pi/PinHP. The script has an option to exclude slow running games.
 
 Put the [aknf-rom-sorter.sh](https://raw.githubusercontent.com/AndyHazz/All-Killer-PinHP-rom-sorter/main/aknf-rom-sorter.sh) script in the root of your PinHP 'rpi2jamma' folder, along with a full **Non-Merged** Mame 0.106 romset in your 'roms_advmame' folder.
 
