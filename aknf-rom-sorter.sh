@@ -220,6 +220,7 @@ moveroms() {
 
 for g in "${GENRES[@]}"
 do
+  mkdir "${GENRES[g]}"
   dialog --title "$SCRIPT_TITLE" \
     --infobox "\nFinding the best ${GENRES[g]} games ..." 7 30
 
