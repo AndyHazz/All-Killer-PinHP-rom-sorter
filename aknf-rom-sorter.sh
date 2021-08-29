@@ -218,13 +218,13 @@ moveroms() {
   fi
 }
 
-for g in "${GENRES[@]}"
+for genre in "${GENRES[@]}"
 do
-  mkdir "${GENRES[g]}"
+  mkdir "$genre"
   dialog --title "$SCRIPT_TITLE" \
-    --infobox "\nFinding the best ${GENRES[g]} games ..." 7 30
+    --infobox "\nFinding the best $genre games ..." 7 30
 
-  moveroms "${GENRES[g]}"
+  moveroms "$genre"
 done
 
 
