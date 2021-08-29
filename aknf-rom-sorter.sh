@@ -18,6 +18,7 @@ BRANCH="main"
 SCRIPT="aknf-rom-sorter.sh"
 UPDATESTRING="v2.0" # This will show in the first dialog title for update confirmation
 SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
+GENRES=("Maze" "Ball & Paddle" "Driving" "Fighter" "Platform" "Puzzle" "Shooter" "Sports" "Vs Fighter")
 
 #Enable Jamma controls, if system is running on Pi2Jamma
 pikeyd165_start() {
@@ -217,70 +218,14 @@ moveroms() {
   fi
 }
 
-#=========== BIOS files ==============================================================
+for g in "${GENRES[@]}"
+do
+  dialog --title "$SCRIPT_TITLE" \
+    --infobox "\nFinding the best ${GENRES[g]} games ..." 7 30
 
-# First, move all the bios files to a hidden folder
+  moveroms "${GENRES[g]}"
+done
 
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nMoving BIOS files aside ..." 7 30
-
-moveroms ".BIOS"
-
-#=========== Beat em ups ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best beat em ups ..." 7 30
-
-moveroms "Beat em ups"
-
-#=========== Classics ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the classics ..." 7 30
-
-moveroms "Classics"
-
-#=========== Platformers ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best platformers ..." 7 30
-
-moveroms "Platformers"
-
-#=========== Puzzle ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best puzzle games ..." 7 30
-
-moveroms "Puzzle"
-
-#=========== Run and gun ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best Run and gun games ..." 7 30
-
-moveroms "Run and gun"
-
-#=========== Shoot em ups ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best shoot em ups ..." 7 30
-
-moveroms "Shoot em ups"
-
-#=========== Sports ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best sports games ..." 7 30
-
-moveroms "Sports"
-
-#=========== Vs Fighting ==============================================================
-
-dialog --title "$SCRIPT_TITLE" \
-  --infobox "\nFinding the best Vs fighting games ..." 7 30
-
-moveroms "Vs Fighting"
 
 #===========Everything else==============================================================
 
