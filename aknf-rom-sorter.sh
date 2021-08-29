@@ -220,7 +220,7 @@ moveroms() {
 
 for genre in "${GENRES[@]}"
 do
-  mkdir "$genre"
+  mkdir "$genre" &> /dev/null
   dialog --title "$SCRIPT_TITLE" \
     --infobox "\nFinding the best $genre games ..." 7 30
 
