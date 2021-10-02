@@ -185,6 +185,20 @@ case $response in
   ;;
 esac
 
+joy2key_start "yesno"
+dialog --title "$SCRIPT_TITLE" \
+  --yesno "\nCreate a separate folder with ALL NeoGeo games?" 11 30
+response=$?
+joy2key_stop
+case $response in
+0) NEOGEO=true ;;
+1) NEOGEO=false ;;
+255)
+  clear
+  [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+  ;;
+esac
+
 # joy2key_start "yesno"
 # dialog --title "$SCRIPT_TITLE" \
 #   --yesno "\nUse rom list already downloaded from github? This is updated less frequently but will be stable. Choose 'No' to use the google sheet directly https://bit.ly/3k3dh9U (active internet connection required)." 15 30
@@ -217,6 +231,10 @@ moveroms() {
     bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
   fi
 }
+
+if [[ "$NEOGEO" = true ]]; then
+  moveroms "- NeoGeo -"
+fi
 
 for genre in "${GENRES[@]}"
 do
