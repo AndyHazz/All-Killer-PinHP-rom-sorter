@@ -233,7 +233,7 @@ moveroms() {
 }
 
 if [[ "$NEOGEO" = true ]]; then
-  moveroms "- NeoGeo -"
+  moveroms "[NeoGeo]"
 fi
 
 for genre in "${GENRES[@]}"
