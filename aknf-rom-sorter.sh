@@ -141,18 +141,34 @@ fi
 #File to check for in the rom path
 FILE="_games.template"
 
+#get full path to rom list
+ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
+
+pikeyd165_start "yesno" "0.5"
+
 if [ -f $FILE ]; then
   dialog --title "$SCRIPT_TITLE" \
     --infobox "Confirmed script is acting on PinHP roms folder" 7 30
 else
-  echo "$FILE does not exist - failed check for PinHP rom folder."
-  echo "Aborting script to avoid disaster"
-  echo "Run the script from PinHP menu"
-  sleep 2
+  joy2key_start "yesno"
+  dialog --title "$SCRIPT_TITLE" \
+    --msgbox "\nCould not find PinHP roms_advmame directory! Run this script from PinHP menu." 7 30
+  joy2key_stop
+  clear
   exit 1
 fi
 
-pikeyd165_start "yesno" "0.5"
+if [ -f $ROMLIST ]; then
+  dialog --title "$SCRIPT_TITLE" \
+    --infobox "Confirmed rom list exists" 7 30
+else
+  joy2key_start "yesno"
+  dialog --title "$SCRIPT_TITLE" \
+    --msgbox "\nCould not find rom sorter list - go online and run the script again to get the list." 7 30
+  joy2key_stop
+  clear
+  exit 1
+fi
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
@@ -213,8 +229,6 @@ esac
 #   ;;
 # esac
 
-#get full path to rom list
-ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
@@ -228,7 +242,7 @@ moveroms() {
   if [[ "$ONLINE" = true && "$SOURCE" = "Google" ]]; then # Download latest from Google sheet
     bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
   else # Use rom list from git repo
-    bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
+    bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'") &> /dev/null
   fi
 }
 
