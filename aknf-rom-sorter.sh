@@ -16,7 +16,7 @@ GOOGLE_SHEET="https://docs.google.com/spreadsheets/d/e/2PACX-1vQAZx0Wz2EqlxtN5CI
 ROMLIST_FILENAME="rom-list.sh"
 BRANCH="main"
 SCRIPT="aknf-rom-sorter.sh"
-UPDATESTRING="v2.0" # This will show in the first dialog title for update confirmation
+UPDATESTRING="v2.1" # This will show in the first dialog title for update confirmation
 SCRIPT_TITLE="Rom sorter - $UPDATESTRING"
 GENRES=("Maze" "Ball & Paddle" "Driving" "Fighter" "Platform" "Puzzle" "Shooter" "Sports" "Vs Fighter")
 
@@ -141,18 +141,34 @@ fi
 #File to check for in the rom path
 FILE="_games.template"
 
+#get full path to rom list
+ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
+
+pikeyd165_start "yesno" "0.5"
+
 if [ -f $FILE ]; then
   dialog --title "$SCRIPT_TITLE" \
     --infobox "Confirmed script is acting on PinHP roms folder" 7 30
 else
-  echo "$FILE does not exist - failed check for PinHP rom folder."
-  echo "Aborting script to avoid disaster"
-  echo "Run the script from PinHP menu"
-  sleep 2
+  joy2key_start "yesno"
+  dialog --title "$SCRIPT_TITLE" \
+    --msgbox "\nCould not find PinHP roms_advmame directory! Run this script from PinHP menu." 11 30
+  joy2key_stop
+  clear
   exit 1
 fi
 
-pikeyd165_start "yesno" "0.5"
+if [ -f $ROMLIST ]; then
+  dialog --title "$SCRIPT_TITLE" \
+    --infobox "Confirmed rom list exists" 7 30
+else
+  joy2key_start "yesno"
+  dialog --title "$SCRIPT_TITLE" \
+    --msgbox "\nCould not find rom sorter list - go online and run the script again to get the list." 11 30
+  joy2key_stop
+  clear
+  exit 1
+fi
 
 joy2key_start "yesno"
 dialog --title "$SCRIPT_TITLE" \
@@ -185,6 +201,20 @@ case $response in
   ;;
 esac
 
+joy2key_start "yesno"
+dialog --title "$SCRIPT_TITLE" \
+  --yesno "\nCreate a separate folder with ALL NeoGeo games?" 11 30
+response=$?
+joy2key_stop
+case $response in
+0) NEOGEO=true ;;
+1) NEOGEO=false ;;
+255)
+  clear
+  [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+  ;;
+esac
+
 # joy2key_start "yesno"
 # dialog --title "$SCRIPT_TITLE" \
 #   --yesno "\nUse rom list already downloaded from github? This is updated less frequently but will be stable. Choose 'No' to use the google sheet directly https://bit.ly/3k3dh9U (active internet connection required)." 15 30
@@ -199,8 +229,6 @@ esac
 #   ;;
 # esac
 
-#get full path to rom list
-ROMLIST="$RPI2JAMMA/$REPO/$ROMLIST_FILENAME"
 
 # Move everything back into the root roms dir so we can start from scratch
 find . -mindepth 2 -type f -print -exec mv {} . \; |
@@ -214,9 +242,16 @@ moveroms() {
   if [[ "$ONLINE" = true && "$SOURCE" = "Google" ]]; then # Download latest from Google sheet
     bash <(curl -s -L "$GOOGLE_SHEET" | grep -v "$EXCLUDE" | grep "'$1'")
   else # Use rom list from git repo
-    bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'")
+    bash <(grep -v "$EXCLUDE" "$ROMLIST" | grep "'$1'") &> /dev/null
   fi
 }
+
+if [[ "$NEOGEO" = true ]]; then
+  dialog --title "$SCRIPT_TITLE" \
+    --infobox "\nSeparating out the NeoGeo games ..." 7 30
+  moveroms "NeoGeo"
+  mv "NeoGeo" "[NeoGeo]"
+fi
 
 for genre in "${GENRES[@]}"
 do

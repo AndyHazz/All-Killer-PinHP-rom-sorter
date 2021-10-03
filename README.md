@@ -6,6 +6,8 @@ Put the [aknf-rom-sorter.sh](https://raw.githubusercontent.com/AndyHazz/All-Kill
 
 Run the script from PinHP's menu (Options > System Settings Menu > System Settings > Run External File).
 
+There's a demo video available here: https://www.youtube.com/watch?v=HIDN9-cbCzs
+
 ## Online updates
 
 Each time you run it (with an active internet connection), the script will update itself, and can also get the latest recommended game list.
@@ -14,16 +16,19 @@ Each time you run it (with an active internet connection), the script will updat
 
 Best games from each genre will be moved into their own subfolders:
 
-- Beat 'em ups
-- Classics
-- Platformers
+- Ball & Paddle
+- Driving
+- Fighter
+- Maze
+- Platform
 - Puzzle
-- Run and gun
-- Shoot 'em ups
+- Shooter
 - Sports
-- Vs Fighting
+- Vs Fighter
 
 Everything else will be put in a hidden '[Leftovers]' folder, which you can still access by selectring the extra blank line below the visible folders.
+
+There is also an option to separate out 151 NeoGeo games (all the parent roms for NeoGeo, whether they're any good or not) and show them all in a '[NeoGeo]' folder.
 
 ## Use the correct rom set
 
