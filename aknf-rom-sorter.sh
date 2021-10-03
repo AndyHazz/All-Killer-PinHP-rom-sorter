@@ -233,8 +233,7 @@ moveroms() {
 }
 
 if [[ "$NEOGEO" = true ]]; then
-  PREFILTER="[NeoGeo]"
-  moveroms "$PREFILTER"
+  moveroms "NeoGeo"
 fi
 
 for genre in "${GENRES[@]}"
