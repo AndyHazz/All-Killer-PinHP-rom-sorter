@@ -152,7 +152,7 @@ if [ -f $FILE ]; then
 else
   joy2key_start "yesno"
   dialog --title "$SCRIPT_TITLE" \
-    --msgbox "\nCould not find PinHP roms_advmame directory! Run this script from PinHP menu." 7 30
+    --msgbox "\nCould not find PinHP roms_advmame directory! Run this script from PinHP menu." 11 30
   joy2key_stop
   clear
   exit 1
@@ -164,7 +164,7 @@ if [ -f $ROMLIST ]; then
 else
   joy2key_start "yesno"
   dialog --title "$SCRIPT_TITLE" \
-    --msgbox "\nCould not find rom sorter list - go online and run the script again to get the list." 7 30
+    --msgbox "\nCould not find rom sorter list - go online and run the script again to get the list." 11 30
   joy2key_stop
   clear
   exit 1
@@ -247,6 +247,8 @@ moveroms() {
 }
 
 if [[ "$NEOGEO" = true ]]; then
+  dialog --title "$SCRIPT_TITLE" \
+    --infobox "\nSeparating out the NeoGeo games ..." 7 30
   moveroms "NeoGeo"
   mv "NeoGeo" "[NeoGeo]"
 fi
