@@ -248,6 +248,7 @@ moveroms() {
 
 if [[ "$NEOGEO" = true ]]; then
   moveroms "NeoGeo"
+  echo "\[NeoGeo\]" > "NeoGeo/.title"
 fi
 
 for genre in "${GENRES[@]}"
